@@ -54,8 +54,8 @@ all: main-build
 main-build: stm32testsuite.elf secondary-outputs
 
 # Tool invocations
-stm32testsuite.elf: $(OBJS) $(USER_OBJS) C:\Users\A\Documents\Projects\Embedded\embedded\Test\STM32F103C8TX_FLASH.ld
-	arm-none-eabi-gcc -o "stm32testsuite.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\A\Documents\Projects\Embedded\embedded\Test\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32testsuite.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+stm32testsuite.elf: $(OBJS) $(USER_OBJS) C:\Users\A\Documents\Projects\Embedded\embedded\STM32Testing\STM32F103C8TX_FLASH.ld
+	arm-none-eabi-gcc -o "stm32testsuite.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\A\Documents\Projects\Embedded\embedded\STM32Testing\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32testsuite.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
