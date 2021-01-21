@@ -28,34 +28,34 @@ endif
 
 -include ../makefile.defs
 
-BUILD_ARTIFACT_NAME := Test
+BUILD_ARTIFACT_NAME := stm32testsuite
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX := 
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME).$(BUILD_ARTIFACT_EXTENSION)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-Test.elf \
+stm32testsuite.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-Test.list \
+stm32testsuite.list \
 
 OBJCOPY_BIN += \
-Test.bin \
+stm32testsuite.bin \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: Test.elf secondary-outputs
+main-build: stm32testsuite.elf secondary-outputs
 
 # Tool invocations
-Test.elf: $(OBJS) $(USER_OBJS) C:\Users\A\Documents\Projects\Embedded\Test\STM32F103C8TX_FLASH.ld
-	arm-none-eabi-gcc -o "Test.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\A\Documents\Projects\Embedded\Test\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Test.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+stm32testsuite.elf: $(OBJS) $(USER_OBJS) C:\Users\A\Documents\Projects\Embedded\embedded\Test\STM32F103C8TX_FLASH.ld
+	arm-none-eabi-gcc -o "stm32testsuite.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\A\Documents\Projects\Embedded\embedded\Test\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32testsuite.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -64,13 +64,13 @@ default.size.stdout: $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Test.list: $(EXECUTABLES)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Test.list"
+stm32testsuite.list: $(EXECUTABLES)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "stm32testsuite.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Test.bin: $(EXECUTABLES)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "Test.bin"
+stm32testsuite.bin: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "stm32testsuite.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
