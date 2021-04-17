@@ -45,10 +45,9 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c2;
 
+UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
-
-
-//bmp_t bmp;
+DMA_HandleTypeDef hdma_usart1_rx;
 
 /* USER CODE BEGIN PV */
 
@@ -57,15 +56,21 @@ UART_HandleTypeDef huart2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint8_t uart1dmabuf[256] ={0};
 
+uint8_t globbuf[256]={0};
+
+//struct bmp180_t* bmp;
 /* USER CODE END 0 */
 
 /**
@@ -96,15 +101,19 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_I2C2_Init();
   MX_USART2_UART_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   uint8_t msg[64] ={0};
+//  uint8_t uart1dmabuf[256] ={0};
 
 
-  BMP180_Start();
-
+ BMP180_Start();
+ //gps?
+  //HAL_UART_Receive_DMA(&huart1,uart1dmabuf,sizeof uart1dmabuf);
 
 
   /* USER CODE END 2 */
@@ -116,25 +125,41 @@ int main(void)
 
 	  HAL_Delay(500);
 
-	  //read calibration data
-	  read_calliberation_data();
+	  /*** BMP180 TEMP & PRESSURE ***/
+	  //temp data to debug uart
+	  read_calibration_data();
 	  float temp = BMP180_GetTemp()*(9.0/5.0)+32.0;
 	  memset(msg,0,sizeof(msg));
-	  sprintf(msg,"Temp: %.2f F\r\n",temp);
+	  sprintf(msg,"\r\nTemp: %.2f F\r\n",temp);
 	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
 
+	  //altitude data to debug
 	  float alt = BMP180_GetAlt(3);
 	  memset(msg,0,sizeof(msg));
 	  sprintf(msg,"Altitude: %.1f ft\r\n",alt*3.2808);
 	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
+	  /*** END BMP180 ***/
 
 
 
+//		gps dma
+//	  HAL_UART_Transmit(&huart2,globbuf, sizeof(globbuf),HAL_MAX_DELAY);
+//	  memset(globbuf,0,sizeof globbuf);
+
+
+
+	  //Green LED blinky
+	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+
+	  //sprintf(msg,"%s\r\n",);
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
+
+
+
   /* USER CODE END 3 */
 }
 
@@ -194,7 +219,7 @@ static void MX_I2C2_Init(void)
   hi2c2.Instance = I2C2;
   hi2c2.Init.ClockSpeed = 100000;
   hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c2.Init.OwnAddress1 = 0;
+  hi2c2.Init.OwnAddress1 = 238;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
   hi2c2.Init.OwnAddress2 = 0;
@@ -207,6 +232,39 @@ static void MX_I2C2_Init(void)
   /* USER CODE BEGIN I2C2_Init 2 */
 
   /* USER CODE END I2C2_Init 2 */
+
+}
+
+/**
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART1_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART1_Init 0 */
+
+  /* USER CODE END USART1_Init 0 */
+
+  /* USER CODE BEGIN USART1_Init 1 */
+
+  /* USER CODE END USART1_Init 1 */
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 9600;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART1_Init 2 */
+
+  /* USER CODE END USART1_Init 2 */
 
 }
 
@@ -244,21 +302,71 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : LED_Pin */
+  GPIO_InitStruct.Pin = LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
+
+
+
+//use this callback to parse GPS data since this is the most process intensive part
+void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart)
+{
+    //HAL_UART_Transmit(&huart2, uart1dmabuf, sizeof uart1dmabuf, 100);
+
+	//copy the halffilled buffer into the globally accessable buffer to parse
+	sprintf(globbuf,"%s\r\n",uart1dmabuf);
+
+	//use strtok to separate each NMEA sentence
+
+	//for each sentence update the gps object with new data
+
+	//on last sentence... add it to from of data to be used next time since it can be cutoff
+
+
+
+}
+
+
 
 /* USER CODE END 4 */
 
