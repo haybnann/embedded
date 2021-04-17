@@ -54,4 +54,4 @@ dkms.conf
 
 #other 
 /.settings
-/Debug
+/STM32Testing/Debug
