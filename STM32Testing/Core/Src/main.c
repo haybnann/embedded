@@ -107,6 +107,7 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  //uart msg buffer
   uint8_t msg[64] ={0};
 //  uint8_t uart1dmabuf[256] ={0};
 

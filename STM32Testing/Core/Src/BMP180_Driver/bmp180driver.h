@@ -12,7 +12,7 @@
 
 
 //REPLACE  extern with a constructor
-extern I2C_HandleTypeDef hi2c2;//define which i2c port the sensor is attached to
+extern I2C_HandleTypeDef hi2c2; //define which i2c port the sensor is attached to
 #define BMP180_I2C &hi2c2		// point to the i2c port with generalized name
 
 /********************************************

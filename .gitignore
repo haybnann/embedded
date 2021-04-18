@@ -55,3 +55,5 @@ dkms.conf
 #other 
 /.settings
 /STM32Testing/Debug
+*.xml
+*.prefs
