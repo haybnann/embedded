@@ -12,6 +12,16 @@
 #ifndef MPU6050_DRIVER_H
 #define MPU6050_DRIVER_H
 
+#include "stm32f1xx_hal.h"
+
+extern I2C_HandleTypeDef hi2c2; //define which i2c port the sensor is attached to
+#define I2C_PORT &hi2c2
+
+
+#define MPU6050_ADDRESS_AD0_LOW     0x68
+#define MPU6050_ADDRESS_AD0_HIGH    0x69
+#define MPU6050_ADDR     			0x68//0xD0//MPU6050_ADDRESS_AD0_LOW
+
 
 //REGISTER MAP on Page 6
 #define MPU6050_SELF_TEST_X		(0x0D)
@@ -258,8 +268,27 @@
 #define MPU6050_CLKSEL_LEN			(3)
 #define MPU6050_LP_WAKE_CTRL_LEN	(4)
 #define MPU6050_WHO_AM_I_LEN		(6)
-//END PAGE 8
+
 
 #define MPU6050_RESET_REGISTER_VAL	(0x00)
+
+//END PAGE 8
+
+//page 9
+//Gyroscope self test code found in MotionApps software by InvenSense
+//self test response (STR) = gyroscope output w selftest enabled - "" disabled
+
+//change from factory trim = (STR -FT)/FT where FT is factory trim value from motionapps
+
+//uint8_t MPU6050_getAccel_X_SelfTestFactoryTrim(){
+	//HAL_I2C_Mem_Read(I2C_PORT, MPU6050_DEFAULT_ADDRESS, MPU6050_SELF_TEST_X, 1, &buf[0]);
+
+//}
+
+
+
+//Init
+void MPU6050_Init();
+int16_t MPU6050_Read_Accel(void);
 
 #endif /* MPU6050_DRIVER_H */

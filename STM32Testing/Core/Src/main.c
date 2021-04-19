@@ -113,6 +113,8 @@ int main(void)
 
 
  BMP180_Start();
+ MPU6050_Init();
+
  //gps?
   //HAL_UART_Receive_DMA(&huart1,uart1dmabuf,sizeof uart1dmabuf);
 
@@ -141,7 +143,10 @@ int main(void)
 	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
 	  /*** END BMP180 ***/
 
-
+	  int16_t accel = MPU6050_Read_Accel();
+	  memset(msg,0,sizeof(msg));
+	  sprintf(msg, " %d ", accel);
+	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
 
 //		gps dma
 //	  HAL_UART_Transmit(&huart2,globbuf, sizeof(globbuf),HAL_MAX_DELAY);
