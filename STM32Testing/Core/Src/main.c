@@ -143,13 +143,27 @@ int main(void)
 	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
 	  /*** END BMP180 ***/
 
-	  int16_t accel = MPU6050_Read_Accel();
+	  //accel
 	  memset(msg,0,sizeof(msg));
-	  sprintf(msg, " %d ", accel);
-	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
+	  uint8_t accelbuff[6];
+	  MPU6050_GetAccelBuffer(accelbuff);
+	  memcpy(msg,accelbuff,6);
+
+	  int16_t x;
+	  int16_t y;
+	  int16_t z;
+	  MPU6050_ParseRawIMUBuffer(accelbuff, &x, &y, &z);
+
+/*
+
+	  int16_t Gx = (int16_t)(Gyro_X_Raw / 16384);
+	  int16_t Gy = (int16_t)(Gyro_Y_Raw / 16384);
+	  int16_t Gz = (int16_t)(Gyro_Z_Raw / 16384);
+*/
+
 
 //		gps dma
-//	  HAL_UART_Transmit(&huart2,globbuf, sizeof(globbuf),HAL_MAX_DELAY);
+//	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
 //	  memset(globbuf,0,sizeof globbuf);
 
 

@@ -20,7 +20,7 @@ extern I2C_HandleTypeDef hi2c2; //define which i2c port the sensor is attached t
 
 #define MPU6050_ADDRESS_AD0_LOW     0x68
 #define MPU6050_ADDRESS_AD0_HIGH    0x69
-#define MPU6050_ADDR     			0x68//0xD0//MPU6050_ADDRESS_AD0_LOW
+#define MPU6050_ADDR     			0xD0//0xD0//MPU6050_ADDRESS_AD0_LOW
 
 
 //REGISTER MAP on Page 6
@@ -276,21 +276,34 @@ extern I2C_HandleTypeDef hi2c2; //define which i2c port the sensor is attached t
 
 //END PAGE 8
 
-//page 9
-//Gyroscope self test code found in MotionApps software by InvenSense
-//self test response (STR) = gyroscope output w selftest enabled - "" disabled
-
-//change from factory trim = (STR -FT)/FT where FT is factory trim value from motionapps
-
-//uint8_t MPU6050_getAccel_X_SelfTestFactoryTrim(){
-	//HAL_I2C_Mem_Read(I2C_PORT, MPU6050_DEFAULT_ADDRESS, MPU6050_SELF_TEST_X, 1, &buf[0]);
-
-//}
 
 
 
-//Init
+/* @brief Init
+ *
+ * @param
+ */
 void MPU6050_Init();
-int16_t MPU6050_Read_Accel(void);
+
+
+/* @brief Get 6 bytes of Gyro data
+ *
+ * @param [out]buffer -
+ */
+void MPU6050_GetGyroBuffer(uint8_t* buffer);
+
+
+/* @brief Get 6 bytes of Acceleration data
+ *
+ * @param [in]buffer -
+ */
+void MPU6050_GetAccelBuffer(uint8_t* buffer);
+
+
+/* @brief Get 6 bytes of Acceleration data
+ *
+ * @param [in]buffer -
+ */
+void MPU6050_ParseRawIMUBuffer(uint8_t* buffer, int16_t* x, int16_t* y, int16_t* z);
 
 #endif /* MPU6050_DRIVER_H */
