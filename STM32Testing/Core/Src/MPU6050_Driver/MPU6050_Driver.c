@@ -29,16 +29,23 @@ void MPU6050_Init(){
 }
 
 void MPU6050_GetGyroBuffer(uint8_t* buffer){
-	//buffer[6] ='\0';
     HAL_I2C_Mem_Read(I2C_PORT, MPU6050_ADDR, MPU6050_GYRO_XOUT_H, 1, buffer, 6, 100);
     HAL_Delay(50);
 }
 
 void MPU6050_GetAccelBuffer(uint8_t* buffer){
-	//buffer[6] ='\0';
     HAL_I2C_Mem_Read(I2C_PORT, MPU6050_ADDR, MPU6050_ACCEL_XOUT_H, 1, buffer, 6, 100);
     HAL_Delay(50);
 }
+
+int16_t MPU6050_GetTempC(){
+	uint8_t* buffer;
+	HAL_I2C_Mem_Read(I2C_PORT, MPU6050_ADDR, MPU6050_TEMP_OUT_H, 1, buffer, 2, 100);
+	HAL_Delay(50);
+
+	return (int16_t) ((((int16_t)(buffer[0] << 8 | buffer[1])) / 340 + 36.53)*10);
+}
+
 
 void MPU6050_ParseRawIMUBuffer(uint8_t* buffer, int16_t* x, int16_t* y, int16_t* z){
 	  *x = (int16_t) (buffer[0] << 8 | buffer[1]);

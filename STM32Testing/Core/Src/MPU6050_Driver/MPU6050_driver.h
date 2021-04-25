@@ -299,6 +299,7 @@ void MPU6050_GetGyroBuffer(uint8_t* buffer);
  */
 void MPU6050_GetAccelBuffer(uint8_t* buffer);
 
+int16_t MPU6050_GetTempC();
 
 /* @brief Get 6 bytes of Acceleration data
  *
