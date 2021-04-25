@@ -57,3 +57,8 @@ dkms.conf
 /STM32Testing/Debug
 *.xml
 *.prefs
+*.cproject
+*.mxproject
+*.project
+*.launch
+*.ioc
