@@ -153,9 +153,10 @@ int main(void)
 	  int16_t y;
 	  int16_t z;
 	  MPU6050_ParseRawIMUBuffer(accelbuff, &x, &y, &z);
+	  MPU6050_CalculateAccel(&x,&y,&z);
 
 	  //if AFS_SEL == 0 then 16384 LSB/g
-	  int16_t xx = (int16_t)(x / 16384);
+	  int16_t xx = (int16_t)(x * 100  / 16384);//x*100 /16384 preserves more decimal places
 
 	  int16_t t = MPU6050_GetTempC();
 

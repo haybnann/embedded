@@ -299,6 +299,17 @@ void MPU6050_GetGyroBuffer(uint8_t* buffer);
  */
 void MPU6050_GetAccelBuffer(uint8_t* buffer);
 
+//these probably need application specific accuracy... figure out what works in most applications and roll with it for now
+void MPU6050_CalculateGyro(int16_t* x, int16_t* y, int16_t z);
+void MPU6050_CalculateAccel(int16_t* x, int16_t* y, int16_t* z);
+
+
+
+
+/* @brief Gets temperature from IMU in degrees C
+ *
+ * @return int16_t temperature in C multiplied by 10 to maintain tenths place accuracy
+ */
 int16_t MPU6050_GetTempC();
 
 /* @brief Get 6 bytes of Acceleration data
