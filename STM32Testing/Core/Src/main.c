@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "BMP180_Driver/bmp180driver.h"
+#include "MPU6050_Driver/MPU6050_Driver.h"
 
 
 /* USER CODE END Includes */
@@ -67,10 +68,9 @@ static void MX_USART1_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint8_t uart1dmabuf[256] ={0};
-
 uint8_t globbuf[256]={0};
 
-//struct bmp180_t* bmp;
+
 /* USER CODE END 0 */
 
 /**
@@ -109,7 +109,7 @@ int main(void)
 
   //uart msg buffer
   uint8_t msg[64] ={0};
-//  uint8_t uart1dmabuf[256] ={0};
+  //  uint8_t uart1dmabuf[256] ={0};
 
 
  BMP180_Start();
@@ -129,55 +129,69 @@ int main(void)
 	  HAL_Delay(500);
 
 	  /*** BMP180 TEMP & PRESSURE ***/
-	  //temp data to debug uart
+
 	  read_calibration_data();
 	  float temp = BMP180_GetTemp()*(9.0/5.0)+32.0;
+	  float alt = BMP180_GetAlt(3);//ERROR
+
+	  //UART Debug shit
 	  memset(msg,0,sizeof(msg));
 	  sprintf(msg,"\r\nTemp: %.2f F\r\n",temp);
 	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
 
-	  //altitude data to debug
-	  float alt = BMP180_GetAlt(3);
-	  memset(msg,0,sizeof(msg));
-	  sprintf(msg,"Altitude: %.1f ft\r\n",alt*3.2808);
-	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
 	  /*** END BMP180 ***/
 
-	  //accel
-	  memset(msg,0,sizeof(msg));
-	  uint8_t accelbuff[6];
-	  MPU6050_GetAccelBuffer(accelbuff);
-	  memcpy(msg,accelbuff,6);
 
-	  int16_t x;
-	  int16_t y;
-	  int16_t z;
-	  MPU6050_ParseRawIMUBuffer(accelbuff, &x, &y, &z);
-	  MPU6050_CalculateAccel(&x,&y,&z);
 
-	  //if AFS_SEL == 0 then 16384 LSB/g
-	  int16_t xx = (int16_t)(x * 100  / 16384);//x*100 /16384 preserves more decimal places
+
+	  /*** MPU6050 ***/
+
+
+	  //Acceleration
+
+	  static uint8_t accelBuffer[6] = {0};
+	  static int16_t ax = 0;
+	  static int16_t ay = 0;
+	  static int16_t az = 0;
+
+	  MPU6050_GetAccelBuffer(&accelBuffer);
+	  MPU6050_ParseRawIMUBuffer(accelBuffer, &ax, &ay, &az);
+	  MPU6050_CalculateAccel(&ax,&ay,&az);
+
+
+
+	  //Temperature
 
 	  int16_t t = MPU6050_GetTempC();
 
-/*
-
-	  int16_t Gx = (int16_t)(Gyro_X_Raw / 16384);
-	  int16_t Gy = (int16_t)(Gyro_Y_Raw / 16384);
-	  int16_t Gz = (int16_t)(Gyro_Z_Raw / 16384);
-*/
 
 
-//		gps dma
+	  //Gyroscope
+
+	  static uint8_t gyroBuffer[6] = {0};
+	  static int16_t gx = 0;
+	  static int16_t gy = 0;
+	  static int16_t gz = 0;
+
+	  MPU6050_GetGyroBuffer(gyroBuffer);
+	  MPU6050_ParseRawIMUBuffer(gyroBuffer, &gx, &gy, &gz);
+	  MPU6050_CalculateGyro(&gx, &gy, &gz);
+
+
+
+
+	  /*** END MPU6050 ***/
+
+	  /***UART DMA ???***/
 //	  HAL_UART_Transmit(&huart2,msg, sizeof(msg),HAL_MAX_DELAY);
 //	  memset(globbuf,0,sizeof globbuf);
 
 
 
-	  //Green LED blinky
+	  /*** GRENN LED BLINK ***/
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 
-	  //sprintf(msg,"%s\r\n",);
+
 
     /* USER CODE END WHILE */
 
