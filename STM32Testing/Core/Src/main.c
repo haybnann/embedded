@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "BMP180_Driver/bmp180driver.h"
 #include "MPU6050_Driver/MPU6050_Driver.h"
+#include "MPU6050_Driver/MPU6050_UnitTest.h"
 
 
 /* USER CODE END Includes */
@@ -119,6 +120,17 @@ int main(void)
   //HAL_UART_Receive_DMA(&huart1,uart1dmabuf,sizeof uart1dmabuf);
 
 
+ // *** UNIT TESTS *** //
+ RunAllUnitTests();
+
+
+
+
+ // *** END UNIT TESTS *** //
+
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -176,6 +188,8 @@ int main(void)
 	  MPU6050_GetGyroBuffer(gyroBuffer);
 	  MPU6050_ParseRawIMUBuffer(gyroBuffer, &gx, &gy, &gz);
 	  MPU6050_CalculateGyro(&gx, &gy, &gz);
+
+
 
 
 
