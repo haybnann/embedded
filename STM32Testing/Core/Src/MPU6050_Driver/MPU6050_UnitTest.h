@@ -32,67 +32,6 @@ void deepCopy(uint8_t* source, uint8_t* dest, int length){
 	}
 }
 
-
-bool CalculateGyroTest(){
-
-	int16_t x = 0x2AAA;
-	int16_t y = 0x2AAA;
-	int16_t z = 0x2AAA;
-
-	MPU6050_CalculateGyro(&x, &y, &z);
-
-	//only tests when ACCEL_CONFIG = 0x18
-	int16_t answer = 0x2091; // 0xAAAA * 100 / 131 = 33351 = 0x8247
-
-	assert(x == answer);
-	assert(y == answer);
-	assert(z == answer);
-
-
-	x = 0x5555;
-	y = 0x5555;
-	z = 0x5555;
-
-	answer = 0x4123;
-
-	MPU6050_CalculateGyro(&x, &y, &z);
-
-	assert(x == answer);
-	assert(y == answer);
-	assert(z == answer);
-
-}
-
-bool CalculateAccelTest(){
-
-	int16_t x = short_AAAA;
-	int16_t y = short_AAAA;
-	int16_t z = short_AAAA;
-
-	MPU6050_CalculateAccel(&x, &y, &z);
-
-	//only tests when ACCEL_CONFIG = 0x18
-	int16_t answer = 0xFF7B;
-
-	assert(x == answer);
-	assert(y == answer);
-	assert(z == answer);
-
-
-	x = short_5555;
-	y = short_5555;
-	z = short_5555;
-
-	answer = 0x0085;
-
-	MPU6050_CalculateAccel(&x, &y, &z);
-
-	assert(x == answer);
-	assert(y == answer);
-	assert(z == answer);
-
-}
-
 bool ParseIMUBufferTest(){
 
 	uint8_t imuBuffer[6];
@@ -117,6 +56,77 @@ bool ParseIMUBufferTest(){
 
 	return true;
 }
+
+bool CalculateGyroTest(){
+
+
+
+	int16_t x = 0x2AAA;
+	int16_t y = 0x2AAA;
+	int16_t z = 0x2AAA;
+
+	MPU6050_CalculateGyro(&x, &y, &z);
+
+	//only tests when GYRO_CONFIG = 0x18
+	int16_t answer = 0x2091; //0x2AAA * 100 /131 = 8337 = 0x2091
+
+	assert(x == answer);
+	assert(y == answer);
+	assert(z == answer);
+
+
+
+	x = 0x5555;
+	y = 0x5555;
+	z = 0x5555;
+
+	answer = 0x4123;
+
+	MPU6050_CalculateGyro(&x, &y, &z);
+
+	assert(x == answer);
+	assert(y == answer);
+	assert(z == answer);
+
+	return true;
+
+}
+
+bool CalculateAccelTest(){
+
+
+
+	int16_t x = short_AAAA;
+	int16_t y = short_AAAA;
+	int16_t z = short_AAAA;
+
+	MPU6050_CalculateAccel(&x, &y, &z);
+
+	//only tests when ACCEL_CONFIG = 0x18
+	int16_t answer = 0xFF7B;
+
+	assert(x == answer);
+	assert(y == answer);
+	assert(z == answer);
+
+
+
+
+	x = short_5555;
+	y = short_5555;
+	z = short_5555;
+
+	answer = 0x0085;
+
+	MPU6050_CalculateAccel(&x, &y, &z);
+
+	assert(x == answer);
+	assert(y == answer);
+	assert(z == answer);
+
+	return true;
+}
+
 
 
 void RunMPU6050UnitTests(){
