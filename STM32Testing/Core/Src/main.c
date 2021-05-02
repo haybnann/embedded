@@ -121,7 +121,7 @@ int main(void)
 
 
  // *** UNIT TESTS *** //
- RunAllUnitTests();
+ RunMPU6050UnitTests();
 
 
 
@@ -185,7 +185,7 @@ int main(void)
 	  static int16_t gy = 0;
 	  static int16_t gz = 0;
 
-	  MPU6050_GetGyroBuffer(gyroBuffer);
+	  MPU6050_GetGyroBuffer(&gyroBuffer);
 	  MPU6050_ParseRawIMUBuffer(gyroBuffer, &gx, &gy, &gz);
 	  MPU6050_CalculateGyro(&gx, &gy, &gz);
 

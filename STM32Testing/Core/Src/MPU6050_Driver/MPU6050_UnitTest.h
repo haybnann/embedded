@@ -7,48 +7,125 @@
 #ifndef MPU6050_UNITTEST_H
 #define MPU6050_UNITTEST_H
 
-#include "MPU6050_driver.h"
+
+#include "MPU6050_Driver.h"
 #include <assert.h>
 #include <stdbool.h>
 
 
 
+//make a deep copy of these variables before each test
+int16_t short_AAAA = 0xAAAA;
+int16_t short_5555 = 0x5555;
 
-void RunAllUnitTests(){
-	UnitTest();
+uint8_t array_AAAA[] = {0xAA, 0xAA};
+uint8_t array_5555[] = {0x55, 0x44};
+
+uint8_t buffer_AA[] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
+uint8_t buffer_55[] = {0x55, 0x55, 0x55, 0x55, 0x55, 0x55};
 
 
+//init new array to assign values
+void deepCopy(uint8_t* source, uint8_t* dest, int length){
+	for(int i = 0; i < length; i++){
+		dest[i] = source[i];
+	}
 }
 
-
-void UnitTest(){
-	assert(true);
-}
 
 bool CalculateGyroTest(){
 
+	int16_t x = 0x2AAA;
+	int16_t y = 0x2AAA;
+	int16_t z = 0x2AAA;
+
+	MPU6050_CalculateGyro(&x, &y, &z);
+
+	//only tests when ACCEL_CONFIG = 0x18
+	int16_t answer = 0x2091; // 0xAAAA * 100 / 131 = 33351 = 0x8247
+
+	assert(x == answer);
+	assert(y == answer);
+	assert(z == answer);
+
+
+	x = 0x5555;
+	y = 0x5555;
+	z = 0x5555;
+
+	answer = 0x4123;
+
+	MPU6050_CalculateGyro(&x, &y, &z);
+
+	assert(x == answer);
+	assert(y == answer);
+	assert(z == answer);
+
+}
+
+bool CalculateAccelTest(){
+
+	int16_t x = short_AAAA;
+	int16_t y = short_AAAA;
+	int16_t z = short_AAAA;
+
+	MPU6050_CalculateAccel(&x, &y, &z);
+
+	//only tests when ACCEL_CONFIG = 0x18
+	int16_t answer = 0xFF7B;
+
+	assert(x == answer);
+	assert(y == answer);
+	assert(z == answer);
+
+
+	x = short_5555;
+	y = short_5555;
+	z = short_5555;
+
+	answer = 0x0085;
+
+	MPU6050_CalculateAccel(&x, &y, &z);
+
+	assert(x == answer);
+	assert(y == answer);
+	assert(z == answer);
+
+}
+
+bool ParseIMUBufferTest(){
+
+	uint8_t imuBuffer[6];
+	int16_t x = 0, y = 0, z = 0;
+
+
+	deepCopy(buffer_AA, imuBuffer, 6);
+	MPU6050_ParseRawIMUBuffer(imuBuffer, &x, &y, &z);
+
+	assert(x == short_AAAA);
+	assert(y == short_AAAA);
+	assert(z == short_AAAA);
+
+
+	deepCopy(buffer_55, imuBuffer, 6);
+	MPU6050_ParseRawIMUBuffer(imuBuffer, &x, &y, &z);
+
+
+	assert(x == short_5555);
+	assert(y == short_5555);
+	assert(z == short_5555);
+
+	return true;
 }
 
 
+void RunMPU6050UnitTests(){
+	if (ParseIMUBufferTest()){	/*print ParseIMUBufferTest Passed*/}
+	if (CalculateAccelTest()){	/*print passed*/ }
+	if (CalculateGyroTest()){	/*print passed*/ }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 
