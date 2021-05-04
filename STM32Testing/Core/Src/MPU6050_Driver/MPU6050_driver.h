@@ -304,8 +304,6 @@ void MPU6050_CalculateGyro(int16_t* x, int16_t* y, int16_t* z);
 void MPU6050_CalculateAccel(int16_t* x, int16_t* y, int16_t* z);
 
 
-
-
 /* @brief Gets temperature from IMU in degrees C
  *
  * @return int16_t temperature in C multiplied by 10 to maintain tenths place accuracy

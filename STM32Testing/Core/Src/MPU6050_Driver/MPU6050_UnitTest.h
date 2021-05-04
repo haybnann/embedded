@@ -13,6 +13,16 @@
 #include <stdbool.h>
 
 
+/*** NOTES ***
+ *	Why does Calculate Gyro Test fail,but Calculate Accel test doesn't?
+ *	 - Signedness of 16 bit numbers
+ *	 - 2's Complement
+ */
+
+
+
+
+
 
 //make a deep copy of these variables before each test
 int16_t short_AAAA = 0xAAAA;
@@ -39,7 +49,7 @@ bool ParseIMUBufferTest(){
 
 
 	deepCopy(buffer_AA, imuBuffer, 6);
-	MPU6050_ParseRawIMUBuffer(imuBuffer, &x, &y, &z);
+	MPU6050_ParseRawIMUBuffer(imuBuffer[0], &x, &y, &z);
 
 	assert(x == short_AAAA);
 	assert(y == short_AAAA);
@@ -67,7 +77,6 @@ bool CalculateGyroTest(){
 
 	MPU6050_CalculateGyro(&x, &y, &z);
 
-	//only tests when GYRO_CONFIG = 0x18
 	int16_t answer = 0x2091; //0x2AAA * 100 /131 = 8337 = 0x2091
 
 	assert(x == answer);
@@ -91,18 +100,19 @@ bool CalculateGyroTest(){
 	return true;
 
 }
-
+/*
+ * Current test only work when ACCEL_CONFIG = 0x18
+ */
 bool CalculateAccelTest(){
 
 
 
-	int16_t x = short_AAAA;
-	int16_t y = short_AAAA;
-	int16_t z = short_AAAA;
+	int16_t x = 0xAAAA;
+	int16_t y = 0xAAAA;
+	int16_t z = 0xAAAA;
 
 	MPU6050_CalculateAccel(&x, &y, &z);
 
-	//only tests when ACCEL_CONFIG = 0x18
 	int16_t answer = 0xFF7B;
 
 	assert(x == answer);
@@ -110,11 +120,9 @@ bool CalculateAccelTest(){
 	assert(z == answer);
 
 
-
-
-	x = short_5555;
-	y = short_5555;
-	z = short_5555;
+	x = 0x5555;
+	y = 0x5555;
+	z = 0x5555;
 
 	answer = 0x0085;
 

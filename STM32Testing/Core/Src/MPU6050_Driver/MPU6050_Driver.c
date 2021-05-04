@@ -28,6 +28,10 @@ void MPU6050_Init(){
         HAL_Delay(50);
     }
 }
+void MPU6050_GetIMUBuffer(uint8_t* buffer){
+    HAL_I2C_Mem_Read(I2C_PORT, MPU6050_ADDR, MPU6050_ACCEL_XOUT_H, 1, buffer, 14, 100);
+    HAL_Delay(100);
+}
 
 void MPU6050_GetGyroBuffer(uint8_t* buffer){
     HAL_I2C_Mem_Read(I2C_PORT, MPU6050_ADDR, MPU6050_GYRO_XOUT_H, 1, buffer, 6, 100);
@@ -38,7 +42,7 @@ void MPU6050_GetAccelBuffer(uint8_t* buffer){
     HAL_I2C_Mem_Read(I2C_PORT, MPU6050_ADDR, MPU6050_ACCEL_XOUT_H, 1, buffer, 6, 100);
     HAL_Delay(100);
 }
-//page 30
+//rename to ScaleGyroscope
 void MPU6050_CalculateGyro(int16_t* x, int16_t* y, int16_t* z){
 	//remove the buffer read and replace with a global state of the register???
 	uint8_t buf;
@@ -74,6 +78,8 @@ void MPU6050_CalculateGyro(int16_t* x, int16_t* y, int16_t* z){
 			//error?
 	}
 }
+
+//rename to ScaleAcceleration
 void MPU6050_CalculateAccel(int16_t* x, int16_t* y, int16_t* z){
 	//remove the buffer read and replace with a global state of the register???
 	uint8_t buf;
@@ -121,7 +127,61 @@ int16_t MPU6050_GetTempC(){
 
 
 void MPU6050_ParseRawIMUBuffer(uint8_t* buffer, int16_t* x, int16_t* y, int16_t* z){
-	  *x = (int16_t) (buffer[0] << 8 | buffer[1]);
-	  *y = (int16_t) (buffer[2] << 8 | buffer[3]);
-	  *z = (int16_t) (buffer[4] << 8 | buffer[5]);
+	*x = (int16_t) (buffer[0] << 8 | buffer[1]);
+	*y = (int16_t) (buffer[2] << 8 | buffer[3]);
+	*z = (int16_t) (buffer[4] << 8 | buffer[5]);
+}
+
+void MPU6050_ParseIMUBuffer(uint8_t* buffer, int16_t* ax, int16_t* ay, int16_t* az, int16_t* t, int16_t* gx, int16_t* gy, int16_t* gz){
+	MPU6050_ParseRawIMUBuffer(buffer[0], &ax, &ay, &az);
+	//Add temperature parsing
+	MPU6050_ParseRawIMUBuffer(buffer[8], &gx, &gy, &gz);
+}
+
+void testProgram(){
+
+	double 	time = 0,
+			prevTime  = 0,
+			dt = 0;
+
+	uint16_t 	ax = 0,
+				ay = 0,
+				az = 0,
+				t  = 0,
+				gx = 0,
+				gy = 0,
+				gz = 0;
+
+	uint8_t buffer[14] = {0};
+
+	while(1){
+
+		prevTime = time;
+		time = HAL_GetTick();//milliseconds
+		dt = (time - prevTime)/1000; //time is seconds
+
+		MPU6050_GetIMUBuffer(&buffer);
+		MPU6050_ParseIMUBuffer(buffer, &ax,&ay, &az, &t, &gx, &gy, &gz);
+		//scale data
+
+		//acceleration angles
+		arx = (180/ PI) * arctan( ax / sqrt( squared(ay) + squared(az) ) );
+		//...finish up
+
+
+		//gyro
+
+		//initially set equal to accel
+		//otherwise:
+		grx = grx + dt * gsx;
+		//... same for rest
+
+
+		//filter portion
+		rx = (0.96 * arx) + (0.04 * grx);
+		//...same for rest
+
+	}
+
+
 }
