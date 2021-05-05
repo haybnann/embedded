@@ -5,6 +5,12 @@
  * @brief C driver for the MPU6050 sensor
  */
 #include "MPU6050_Driver.h"
+#include "stdio.h"
+#include "math.h"
+
+
+
+#define PI (22/7)
 
 
 void MPU6050_Init(){
@@ -132,6 +138,7 @@ void MPU6050_ParseRawIMUBuffer(uint8_t* buffer, int16_t* x, int16_t* y, int16_t*
 	*z = (int16_t) (buffer[4] << 8 | buffer[5]);
 }
 
+//change name to get scaled IMU data
 void MPU6050_ParseIMUBuffer(uint8_t* buffer, int16_t* ax, int16_t* ay, int16_t* az, int16_t* t, int16_t* gx, int16_t* gy, int16_t* gz){
 	MPU6050_ParseRawIMUBuffer(buffer[0], &ax, &ay, &az);
 	//Add temperature parsing
@@ -140,6 +147,7 @@ void MPU6050_ParseIMUBuffer(uint8_t* buffer, int16_t* ax, int16_t* ay, int16_t* 
 
 void testProgram(){
 
+	uint8_t first = 1;
 	double 	time = 0,
 			prevTime  = 0,
 			dt = 0;
@@ -152,6 +160,14 @@ void testProgram(){
 				gy = 0,
 				gz = 0;
 
+	int16_t		arx = 0,
+				ary = 0,
+				arz = 0,
+				grx = 0,
+				gry = 0,
+				grz = 0;
+
+
 	uint8_t buffer[14] = {0};
 
 	while(1){
@@ -160,25 +176,35 @@ void testProgram(){
 		time = HAL_GetTick();//milliseconds
 		dt = (time - prevTime)/1000; //time is seconds
 
+
 		MPU6050_GetIMUBuffer(&buffer);
-		MPU6050_ParseIMUBuffer(buffer, &ax,&ay, &az, &t, &gx, &gy, &gz);
-		//scale data
+		MPU6050_ParseIMUBuffer(buffer, &ax,&ay, &az, &t, &gx, &gy, &gz); //returns scaled data
 
 		//acceleration angles
-		arx = (180/ PI) * arctan( ax / sqrt( squared(ay) + squared(az) ) );
-		//...finish up
-
+		arx = (180 / PI) * atan( ax / sqrt( pow(ay,2) + pow(az,2) ) );
+		ary = (180 / PI) * atan( ay / sqrt( pow(ax,2) + pow(az,2) ) );
+		arz = (180 / PI) * atan( sqrt( pow(ay,2) + pow(ax,2) ) / az );
 
 		//gyro
 
 		//initially set equal to accel
-		//otherwise:
-		grx = grx + dt * gsx;
-		//... same for rest
+		if(first){
+			grx = arx;
+			gry = ary;
+			grz = arz;
+			first = 0;
 
+		}else{
+			//otherwise:
+			grx = grx + dt * gx;
+			gry = gry + dt * gy;
+			grz = grz + dt * gz;
+		}
 
 		//filter portion
-		rx = (0.96 * arx) + (0.04 * grx);
+		arx = (0.96 * arx) + (0.04 * gx);
+		ary = (0.96 * ary) + (0.04 * gy);
+		arz = (0.96 * arz) + (0.04 * gz);
 		//...same for rest
 
 	}
