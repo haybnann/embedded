@@ -49,7 +49,7 @@ void MPU6050_GetAccelBuffer(uint8_t* buffer){
     HAL_Delay(100);
 }
 //rename to ScaleGyroscope
-void MPU6050_CalculateGyro(int16_t* x, int16_t* y, int16_t* z){
+void MPU6050_ScaleGyroscope(int16_t* x, int16_t* y, int16_t* z){
 	//remove the buffer read and replace with a global state of the register???
 	uint8_t buf;
 	HAL_I2C_Mem_Read(I2C_PORT, MPU6050_ADDR, MPU6050_GYRO_CONFIG, 1, &buf, 1, 100);
@@ -85,8 +85,8 @@ void MPU6050_CalculateGyro(int16_t* x, int16_t* y, int16_t* z){
 	}
 }
 
-//rename to ScaleAcceleration
-void MPU6050_CalculateAccel(int16_t* x, int16_t* y, int16_t* z){
+
+void MPU6050_ScaleAcceleration(int16_t* x, int16_t* y, int16_t* z){
 	//remove the buffer read and replace with a global state of the register???
 	uint8_t buf;
 	HAL_I2C_Mem_Read(I2C_PORT, MPU6050_ADDR, MPU6050_ACCEL_CONFIG, 1, &buf, 1, 100);
@@ -131,7 +131,7 @@ int16_t MPU6050_GetTempC(){
 	return (int16_t) ( ( ( (int16_t)(buffer[0] << 8 | buffer[1]) ) / 340 + 36.53) * 10);
 }
 
-
+//rename to something else
 void MPU6050_ParseRawIMUBuffer(uint8_t* buffer, int16_t* x, int16_t* y, int16_t* z){
 	*x = (int16_t) (buffer[0] << 8 | buffer[1]);
 	*y = (int16_t) (buffer[2] << 8 | buffer[3]);
@@ -184,6 +184,13 @@ void testProgram(){
 		arx = (180 / PI) * atan( ax / sqrt( pow(ay,2) + pow(az,2) ) );
 		ary = (180 / PI) * atan( ay / sqrt( pow(ax,2) + pow(az,2) ) );
 		arz = (180 / PI) * atan( sqrt( pow(ay,2) + pow(ax,2) ) / az );
+		/*
+		 * void getAccelerationAngles( int16_t* ax, int16_t* ay, int16_t* az, int16_t* arx, int16_t* ary, int16_t* arz){
+		 * 		*arx = (180 / PI) * atan( ax / sqrt( pow(ay,2) + pow(az,2) ) );
+				*ary = (180 / PI) * atan( ay / sqrt( pow(ax,2) + pow(az,2) ) );
+				*arz = (180 / PI) * atan( sqrt( pow(ay,2) + pow(ax,2) ) / az );
+			}
+		 */
 
 		//gyro
 

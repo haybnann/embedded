@@ -67,7 +67,7 @@ bool ParseIMUBufferTest(){
 	return true;
 }
 
-bool CalculateGyroTest(){
+bool ScaleGyroscopeTest(){
 
 
 
@@ -75,7 +75,7 @@ bool CalculateGyroTest(){
 	int16_t y = 0x2AAA;
 	int16_t z = 0x2AAA;
 
-	MPU6050_CalculateGyro(&x, &y, &z);
+	MPU6050_ScaleGyroscope(&x, &y, &z);
 
 	int16_t answer = 0x2091; //0x2AAA * 100 /131 = 8337 = 0x2091
 
@@ -91,7 +91,7 @@ bool CalculateGyroTest(){
 
 	answer = 0x4123;
 
-	MPU6050_CalculateGyro(&x, &y, &z);
+	MPU6050_ScaleGyroscope(&x, &y, &z);
 
 	assert(x == answer);
 	assert(y == answer);
@@ -103,7 +103,7 @@ bool CalculateGyroTest(){
 /*
  * Current test only work when ACCEL_CONFIG = 0x18
  */
-bool CalculateAccelTest(){
+bool ScaleAccelerationTest(){
 
 
 
@@ -111,7 +111,7 @@ bool CalculateAccelTest(){
 	int16_t y = 0xAAAA;
 	int16_t z = 0xAAAA;
 
-	MPU6050_CalculateAccel(&x, &y, &z);
+	MPU6050_ScaleAcceleration(&x, &y, &z);
 
 	int16_t answer = 0xFF7B;
 
@@ -126,7 +126,7 @@ bool CalculateAccelTest(){
 
 	answer = 0x0085;
 
-	MPU6050_CalculateAccel(&x, &y, &z);
+	MPU6050_ScaleAcceleration(&x, &y, &z);
 
 	assert(x == answer);
 	assert(y == answer);
@@ -139,8 +139,8 @@ bool CalculateAccelTest(){
 
 void RunMPU6050UnitTests(){
 	if (ParseIMUBufferTest()){	/*print ParseIMUBufferTest Passed*/}
-	if (CalculateAccelTest()){	/*print passed*/ }
-	if (CalculateGyroTest()){	/*print passed*/ }
+	if (ScaleAccelerationTest()){	/*print passed*/ }
+	if (ScaleGyroscopeTest()){	/*print passed*/ }
 
 
 }

@@ -65,6 +65,7 @@ static void MX_USART2_UART_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -108,6 +109,10 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+
+
+
+
 
   //uart msg buffer
   uint8_t msg[64] ={0};
@@ -169,7 +174,7 @@ int main(void)
 
 	  MPU6050_GetAccelBuffer(&accelBuffer);
 	  MPU6050_ParseRawIMUBuffer(accelBuffer, &ax, &ay, &az);
-	  MPU6050_CalculateAccel(&ax,&ay,&az);
+	  MPU6050_ScaleAcceleration(&ax,&ay,&az);
 
 
 
@@ -188,7 +193,7 @@ int main(void)
 
 	  MPU6050_GetGyroBuffer(&gyroBuffer);
 	  MPU6050_ParseRawIMUBuffer(gyroBuffer, &gx, &gy, &gz);
-	  MPU6050_CalculateGyro(&gx, &gy, &gz);
+	  MPU6050_ScaleGyroscope(&gx, &gy, &gz);
 
 
 
