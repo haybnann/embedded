@@ -50,3 +50,28 @@ TEST(MatrixTest, eye) {
 		}
 	}
 }
+
+
+TEST(MatrixTest, MatrixAdditionOverload) {
+
+	Matrix a, b, c;
+	int row = 4, col = 4;
+
+	a.matrix(row, col).eye();
+	b.matrix(row, col).eye();
+
+	//this shouldn't work.. right???
+	c = a + b;
+
+	for (int ii = 0; ii < row; ii++) {
+		for (int jj = 0; jj < col; jj++) {
+			if (ii == jj) {
+				EXPECT_EQ(2, c.values[ii][jj]);
+			}
+			else {
+				EXPECT_EQ(0, c.values[ii][jj]);
+			}
+			
+		}
+	}
+}

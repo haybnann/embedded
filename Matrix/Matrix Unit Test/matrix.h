@@ -49,7 +49,27 @@ public:
 		}
 	}
 
+	//overload addition for matrices
+	Matrix& operator + (Matrix& m) {
 
+		//Change assertions to return an error
+		assert(this->columns == m.columns);
+		assert(this->rows == m.rows);
+
+		Matrix newMatrix;
+		newMatrix.matrix(this->rows, this->columns);
+
+		for (int ii = 0; ii < newMatrix.rows; ii++) {
+			for (int jj = 0; jj < newMatrix.columns; jj++) {
+				newMatrix.values[ii][jj] = this->values[ii][jj] + m.values[ii][jj];
+			}
+		}
+
+		return newMatrix;
+	}
+
+
+	//overload = Next
 
 
 };
