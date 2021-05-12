@@ -33,6 +33,14 @@ public:
 		return *this;
 	}
 
+	//Destructor
+	void freeMatrix() {
+		for (int ii = 0; ii < this->rows; ii++) {
+			free(this->values[ii]);
+		}
+		free(this->values);
+	}
+
 	//assign a specific element at a specified place
 	void setElement(int r, int c, float value) {
 		this->values[r-1][c-1] = value;
@@ -68,8 +76,44 @@ public:
 		return newMatrix;
 	}
 
+	Matrix& operator * (Matrix& m) {
+
+		assert(this->columns == m.rows);
+
+
+		Matrix newMatrix;
+		newMatrix.matrix(this->rows, m.columns);
+
+
+		for (int ii = 0; ii < this->rows; ii++) {
+
+			for (int jj = 0; jj < m.columns; jj++) {
+
+				float sum = 0;
+
+				for (int kk = 0; kk < m.rows; kk++){
+					sum += (this->values[ii][kk] * m.values[kk][jj]);
+				}
+
+				newMatrix.values[ii][jj] = sum;
+
+			}
+		}
+		return newMatrix;
+	}
+
 
 	//overload = Next
+
+
+	void printMatrix() {
+		for (int ii = 0; ii < this->rows; ii++) {
+			for (int jj = 0; jj < this->columns; jj++) {
+				printf("%f", this->values[ii][jj]);
+			}
+			printf("\n");
+		}
+	}
 
 
 };
