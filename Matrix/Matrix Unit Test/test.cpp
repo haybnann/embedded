@@ -78,18 +78,41 @@ TEST(MatrixTest, MatrixAdditionOverload) {
 		}
 	}
 }
+
+
+
+TEST(MatrixTest, MatrixSubtractionOverload) {
+
+	Matrix a, b, c;
+	int row = 4, col = 4;
+
+	a.matrix(row, col).eye();
+	b.matrix(row, col).eye();
+
+	c = a - b;
+
+	EXPECT_EQ(row, c.rows);
+	EXPECT_EQ(col, c.columns);
+
+	for (int ii = 0; ii < row; ii++) {
+		for (int jj = 0; jj < col; jj++) {
+			EXPECT_EQ(0, c.values[ii][jj]);
+		}
+	}
+}
+
+
+
 TEST(MatrixTest, MatrixMultiplicationOverload) {
 
 	Matrix a, b, c;
 
-
-	a.matrix(1, 3).eye();
+	a.matrix(2, 3).eye();
 	b.matrix(3, 4).eye();
 
-	//this shouldn't work right.. right???
 	c = a * b;
-	c.printMatrix();
-	EXPECT_EQ(1, c.rows);
+
+	EXPECT_EQ(2, c.rows);
 	EXPECT_EQ(4, c.columns);
 /*
 	for (int ii = 0; ii < row; ii++) {
@@ -109,5 +132,5 @@ TEST(MatrixTest, PrintMatrix) {
 	Matrix a;
 	a.matrix(3, 4).eye();
 
-	a.printMatrix();
+	//a.printMatrix();
 }

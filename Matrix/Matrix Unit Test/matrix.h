@@ -46,7 +46,7 @@ public:
 		this->values[r-1][c-1] = value;
 	}
 
-	//make a diagonal matrix
+	//make a diagonal matrix  -- Rename maindiangonal ???
 	void eye() {
 		for (int ii = 0; ii < this->rows; ii++) {
 			for (int jj = 0; jj <= ii; jj++) {
@@ -76,6 +76,27 @@ public:
 		return newMatrix;
 	}
 
+
+	Matrix& operator - (Matrix& m) {
+
+		//Change assertions to return an error
+		assert(this->columns == m.columns);
+		assert(this->rows == m.rows);
+
+		Matrix newMatrix;
+		newMatrix.matrix(this->rows, this->columns);
+
+		for (int ii = 0; ii < newMatrix.rows; ii++) {
+			for (int jj = 0; jj < newMatrix.columns; jj++) {
+				newMatrix.values[ii][jj] = this->values[ii][jj] - m.values[ii][jj];
+			}
+		}
+
+		return newMatrix;
+	}
+
+
+
 	Matrix& operator * (Matrix& m) {
 
 		assert(this->columns == m.rows);
@@ -103,15 +124,17 @@ public:
 	}
 
 
+
 	//overload = Next
 
 
 	void printMatrix() {
 		for (int ii = 0; ii < this->rows; ii++) {
+			printf("[");
 			for (int jj = 0; jj < this->columns; jj++) {
-				printf("%f", this->values[ii][jj]);
+				printf(" %.1f ", this->values[ii][jj]);
 			}
-			printf("\n");
+			printf("]\n");
 		}
 	}
 
