@@ -128,6 +128,31 @@ TEST(MatrixTest, MatrixMultiplicationOverload) {
 	}*/
 }
 
+
+
+TEST(MatrixTest, MatrixMultiplicationOverload2) {
+
+	Matrix a, b;
+
+	a.matrix(2, 3).eye();
+
+	b = a * (float)5.3;
+
+	EXPECT_EQ(2, b.rows);
+	EXPECT_EQ(3, b.columns);
+	for (int ii = 0; ii < b.rows; ii++) {
+		for (int jj = 0; jj < b.columns; jj++) {
+			if (ii == jj) {
+				EXPECT_FLOAT_EQ(5.3, b.values[ii][jj]);
+			}
+			else {
+				EXPECT_FLOAT_EQ(0, b.values[ii][jj]);
+			}
+		}
+	}
+
+}
+
 TEST(MatrixTest, PrintMatrix) {
 	Matrix a;
 	a.matrix(3, 4).eye();

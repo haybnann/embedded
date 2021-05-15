@@ -125,6 +125,24 @@ public:
 
 
 
+
+	Matrix& operator* (float scalar) {
+
+		Matrix newMatrix;
+		newMatrix.matrix(this->rows, this->columns);
+
+
+		for (int ii = 0; ii < this->rows; ii++) {
+
+			for (int jj = 0; jj < this->columns; jj++) {
+
+				newMatrix.values[ii][jj] = scalar * this->values[ii][jj];
+			}
+		}
+		return newMatrix;
+	}
+
+
 	//overload = Next
 
 
