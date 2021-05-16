@@ -28,13 +28,15 @@ public:
 	void eye();
 
 	//overload addition for matrices
-	Matrix& operator + (Matrix& m);
+	Matrix operator + (Matrix m);
 
-	Matrix& operator - (Matrix& m);
+	Matrix operator - (Matrix m);
 
-	Matrix& operator * (Matrix& m);									//Matrix * Matrix
-	Matrix& operator * (float scalar);								//Matrix * Scalar
-	friend Matrix& operator * (const float scalar, const Matrix m); //Scalar * Matrix
+
+	//Rewrite to make params pass by reference ???
+	Matrix operator * (Matrix m);									//Matrix * Matrix
+	Matrix operator * (float scalar);								//Matrix * Scalar
+	friend Matrix operator * (const float scalar, const Matrix m); //Scalar * Matrix
 
 	//overload = Next
 	

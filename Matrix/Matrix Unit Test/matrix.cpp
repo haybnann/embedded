@@ -50,8 +50,10 @@ void Matrix::eye() {
 	}
 }
 
-//overload addition for matrices
-Matrix& Matrix::operator + (Matrix& m) {
+
+
+//*** Overloaded Functions***/
+Matrix Matrix::operator + (Matrix m) {
 
 	//Change assertions to return an error
 	assert(this->columns == m.columns);
@@ -70,7 +72,7 @@ Matrix& Matrix::operator + (Matrix& m) {
 }
 
 
-Matrix& Matrix::operator - (Matrix& m) {
+Matrix Matrix::operator - (Matrix m) {
 
 	//Change assertions to return an error
 	assert(this->columns == m.columns);
@@ -89,8 +91,7 @@ Matrix& Matrix::operator - (Matrix& m) {
 }
 
 
-//Matrix * matrix
-Matrix& Matrix::operator * (Matrix& m) {
+Matrix Matrix::operator * (Matrix m) {
 
 	assert(this->columns == m.rows);
 
@@ -115,9 +116,7 @@ Matrix& Matrix::operator * (Matrix& m) {
 }
 
 
-
-//Matrix * Scalar
-Matrix& Matrix::operator* (float scalar) {
+Matrix Matrix::operator * (float scalar) {
 
 	Matrix newMatrix;
 	newMatrix.matrix(this->rows, this->columns);
@@ -134,18 +133,7 @@ Matrix& Matrix::operator* (float scalar) {
 }
 
 
-void Matrix::printMatrix() {
-	for (int ii = 0; ii < this->rows; ii++) {
-		printf("[");
-		for (int jj = 0; jj < this->columns; jj++) {
-			printf(" %.1f ", this->values[ii][jj]);
-		}
-		printf("]\n");
-	}
-}
-
-//Scalar * Matrix
-Matrix& operator * (const float scalar, const Matrix m) {
+Matrix operator * (const float scalar, const Matrix m) {
 
 	Matrix newMatrix;
 	newMatrix.matrix(m.rows, m.columns);
@@ -159,4 +147,16 @@ Matrix& operator * (const float scalar, const Matrix m) {
 		}
 	}
 	return newMatrix;
+}
+
+
+
+void Matrix::printMatrix() {
+	for (int ii = 0; ii < this->rows; ii++) {
+		printf("[");
+		for (int jj = 0; jj < this->columns; jj++) {
+			printf(" %.1f ", this->values[ii][jj]);
+		}
+		printf("]\n");
+	}
 }
