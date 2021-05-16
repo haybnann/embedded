@@ -31,13 +31,13 @@ public:
 	//overload addition for matrices
 	Matrix& operator + (const Matrix& m);
 
-	Matrix operator - (Matrix m);
+	Matrix& operator - (Matrix& m);
 
 
 	//Rewrite to make params pass by reference ???
-	Matrix operator * (Matrix m);									//Matrix * Matrix
-	Matrix operator * (float scalar);								//Matrix * Scalar
-	friend Matrix operator * (const float scalar, const Matrix m); //Scalar * Matrix
+	Matrix& operator * (Matrix& m);									//Matrix * Matrix
+	Matrix& operator * (float scalar);								//Matrix * Scalar
+	friend Matrix operator * (const float scalar, const Matrix& m); //Scalar * Matrix
 
 
 	Matrix& operator = (const Matrix& matrix);

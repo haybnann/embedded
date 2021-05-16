@@ -84,9 +84,18 @@ TEST(MatrixTest, MatrixEqualityOverload) {
 	EXPECT_FALSE(&a == &b);
 	EXPECT_FALSE(&(a.values) == &(b.values));
 
+	for (int ii = 0; ii < row; ii++) {
+		for (int jj = 0; jj < col; jj++) {
+			if (ii == jj) {
+				EXPECT_EQ(1, b.values[ii][jj]);
+			}
+			else {
+				EXPECT_EQ(0, b.values[ii][jj]);
+			}
+		}
+	}
 }
 
-/*
 
 TEST(MatrixTest, MatrixAdditionOverload) {
 	
@@ -99,7 +108,9 @@ TEST(MatrixTest, MatrixAdditionOverload) {
 	b.eye();
 
 	//broken here
-	Matrix c = a + b;
+	Matrix c;
+
+	c = (a + b);
 
 	EXPECT_EQ(row, c.rows);
 	EXPECT_EQ(col, c.columns);
@@ -222,4 +233,3 @@ TEST(MatrixTest, PrintMatrix) {
 
 	//a.printMatrix();
 }
-*/
