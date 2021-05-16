@@ -80,7 +80,6 @@ TEST(MatrixTest, MatrixAdditionOverload) {
 }
 
 
-
 TEST(MatrixTest, MatrixSubtractionOverload) {
 
 	Matrix a, b, c;
@@ -102,7 +101,6 @@ TEST(MatrixTest, MatrixSubtractionOverload) {
 }
 
 
-
 TEST(MatrixTest, MatrixMultiplicationOverload) {
 
 	Matrix a, b, c;
@@ -114,23 +112,22 @@ TEST(MatrixTest, MatrixMultiplicationOverload) {
 
 	EXPECT_EQ(2, c.rows);
 	EXPECT_EQ(4, c.columns);
-/*
-	for (int ii = 0; ii < row; ii++) {
-		for (int jj = 0; jj < col; jj++) {
+
+	for (int ii = 0; ii < c.rows; ii++) {
+		for (int jj = 0; jj < c.columns; jj++) {
 			if (ii == jj) {
-				EXPECT_EQ(2, c.values[ii][jj]);
+				EXPECT_FLOAT_EQ(1, c.values[ii][jj]);
 			}
 			else {
-				EXPECT_EQ(0, c.values[ii][jj]);
+				EXPECT_FLOAT_EQ(0, c.values[ii][jj]);
 			}
 
 		}
-	}*/
+	}
 }
 
 
-
-TEST(MatrixTest, MatrixMultiplicationOverload2) {
+TEST(MatrixTest, MatrixScalarMultiplicationOverload) {
 
 	Matrix a, b;
 
@@ -140,6 +137,7 @@ TEST(MatrixTest, MatrixMultiplicationOverload2) {
 
 	EXPECT_EQ(2, b.rows);
 	EXPECT_EQ(3, b.columns);
+
 	for (int ii = 0; ii < b.rows; ii++) {
 		for (int jj = 0; jj < b.columns; jj++) {
 			if (ii == jj) {
@@ -152,6 +150,32 @@ TEST(MatrixTest, MatrixMultiplicationOverload2) {
 	}
 
 }
+
+
+TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
+
+	Matrix a, b;
+
+	a.matrix(2, 3).eye();
+
+	b = (float)5.3 * a  ;
+
+	EXPECT_EQ(2, b.rows);
+	EXPECT_EQ(3, b.columns);
+
+	for (int ii = 0; ii < b.rows; ii++) {
+		for (int jj = 0; jj < b.columns; jj++) {
+			if (ii == jj) {
+				EXPECT_FLOAT_EQ(5.3, b.values[ii][jj]);
+			}
+			else {
+				EXPECT_FLOAT_EQ(0, b.values[ii][jj]);
+			}
+		}
+	}
+
+}
+
 
 TEST(MatrixTest, PrintMatrix) {
 	Matrix a;

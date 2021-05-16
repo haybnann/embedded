@@ -13,149 +13,33 @@ public:
 	int columns;
 	float** values;
 
+
+	void printMatrix();
 	//Constructor
-	Matrix matrix(int r, int c) {
-
-		this->rows = r;
-		this->columns = c;
-
-		values = new float*[r];
-
-		//Create Matrix
-		for (int ii = 0; ii < r; ii++) {
-			values[ii] = new float[c];
-
-			//Initialize to Zero
-			for (int jj = 0; jj < c; jj++) {
-				values[ii][jj] = 0;
-			}
-		}
-		return *this;
-	}
+	Matrix matrix(int r, int c);
 
 	//Destructor
-	void freeMatrix() {
-		for (int ii = 0; ii < this->rows; ii++) {
-			free(this->values[ii]);
-		}
-		free(this->values);
-	}
+	void freeMatrix();
 
 	//assign a specific element at a specified place
-	void setElement(int r, int c, float value) {
-		this->values[r-1][c-1] = value;
-	}
+	void setElement(int r, int c, float value);
 
 	//make a diagonal matrix  -- Rename maindiangonal ???
-	void eye() {
-		for (int ii = 0; ii < this->rows; ii++) {
-			for (int jj = 0; jj <= ii; jj++) {
-				if (ii == jj) {
-					this->values[ii][jj] = 1;
-				}
-			}
-		}
-	}
+	void eye();
 
 	//overload addition for matrices
-	Matrix& operator + (Matrix& m) {
+	Matrix& operator + (Matrix& m);
 
-		//Change assertions to return an error
-		assert(this->columns == m.columns);
-		assert(this->rows == m.rows);
+	Matrix& operator - (Matrix& m);
 
-		Matrix newMatrix;
-		newMatrix.matrix(this->rows, this->columns);
-
-		for (int ii = 0; ii < newMatrix.rows; ii++) {
-			for (int jj = 0; jj < newMatrix.columns; jj++) {
-				newMatrix.values[ii][jj] = this->values[ii][jj] + m.values[ii][jj];
-			}
-		}
-
-		return newMatrix;
-	}
-
-
-	Matrix& operator - (Matrix& m) {
-
-		//Change assertions to return an error
-		assert(this->columns == m.columns);
-		assert(this->rows == m.rows);
-
-		Matrix newMatrix;
-		newMatrix.matrix(this->rows, this->columns);
-
-		for (int ii = 0; ii < newMatrix.rows; ii++) {
-			for (int jj = 0; jj < newMatrix.columns; jj++) {
-				newMatrix.values[ii][jj] = this->values[ii][jj] - m.values[ii][jj];
-			}
-		}
-
-		return newMatrix;
-	}
-
-
-
-	Matrix& operator * (Matrix& m) {
-
-		assert(this->columns == m.rows);
-
-
-		Matrix newMatrix;
-		newMatrix.matrix(this->rows, m.columns);
-
-
-		for (int ii = 0; ii < this->rows; ii++) {
-
-			for (int jj = 0; jj < m.columns; jj++) {
-
-				float sum = 0;
-
-				for (int kk = 0; kk < m.rows; kk++){
-					sum += (this->values[ii][kk] * m.values[kk][jj]);
-				}
-
-				newMatrix.values[ii][jj] = sum;
-
-			}
-		}
-		return newMatrix;
-	}
-
-
-
-
-	Matrix& operator* (float scalar) {
-
-		Matrix newMatrix;
-		newMatrix.matrix(this->rows, this->columns);
-
-
-		for (int ii = 0; ii < this->rows; ii++) {
-
-			for (int jj = 0; jj < this->columns; jj++) {
-
-				newMatrix.values[ii][jj] = scalar * this->values[ii][jj];
-			}
-		}
-		return newMatrix;
-	}
-
+	Matrix& operator * (Matrix& m);									//Matrix * Matrix
+	Matrix& operator * (float scalar);								//Matrix * Scalar
+	friend Matrix& operator * (const float scalar, const Matrix m); //Scalar * Matrix
 
 	//overload = Next
-
-
-	void printMatrix() {
-		for (int ii = 0; ii < this->rows; ii++) {
-			printf("[");
-			for (int jj = 0; jj < this->columns; jj++) {
-				printf(" %.1f ", this->values[ii][jj]);
-			}
-			printf("]\n");
-		}
-	}
-
+	
 
 };
 
+
+//Scalar * Matrix
