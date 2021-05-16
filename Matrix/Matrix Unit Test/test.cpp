@@ -38,13 +38,13 @@ TEST(MatrixTest, Destructor) {
 	delete mat;
 }
 
-/*
-TEST(MatrixTest, setElement) {
 
-	Matrix mat;
+TEST(MatrixTest, setElement) {
+	
 	int row = 4, col = 4;
 
-	mat.matrix(row, col);
+	Matrix mat = Matrix(row, col);
+
 	mat.setElement(1, 3, 2.3);
 
 	EXPECT_FLOAT_EQ(2.3, mat.values[0][2]);
@@ -53,10 +53,10 @@ TEST(MatrixTest, setElement) {
 
 TEST(MatrixTest, eye) {
 
-	Matrix mat;
 	int row = 4, col = 4;
-
-	mat.matrix(row, col).eye();
+	
+	Matrix mat = Matrix(row, col);
+	mat.eye();
 
 	for (int ii = 0; ii < row; ii++) {
 		for (int jj = 0; jj < col; jj++) {
@@ -70,17 +70,36 @@ TEST(MatrixTest, eye) {
 	}
 }
 
+TEST(MatrixTest, MatrixEqualityOverload) {
 
-TEST(MatrixTest, MatrixAdditionOverload) {
-
-	Matrix a, b, c;
 	int row = 4, col = 4;
 
-	a.matrix(row, col).eye();
-	b.matrix(row, col).eye();
+	Matrix a = Matrix(row, col);
+	Matrix b;
 
-	//this shouldn't work right.. right???
-	c = a + b;
+	a.eye();
+
+	b = a;
+
+	EXPECT_FALSE(&a == &b);
+	EXPECT_FALSE(&(a.values) == &(b.values));
+
+}
+
+/*
+
+TEST(MatrixTest, MatrixAdditionOverload) {
+	
+	int row = 4, col = 4;
+	
+	Matrix a = Matrix(row, col);
+	Matrix b = Matrix(row, col);
+	
+	a.eye();
+	b.eye();
+
+	//broken here
+	Matrix c = a + b;
 
 	EXPECT_EQ(row, c.rows);
 	EXPECT_EQ(col, c.columns);
@@ -101,13 +120,15 @@ TEST(MatrixTest, MatrixAdditionOverload) {
 
 TEST(MatrixTest, MatrixSubtractionOverload) {
 
-	Matrix a, b, c;
 	int row = 4, col = 4;
 
-	a.matrix(row, col).eye();
-	b.matrix(row, col).eye();
+	Matrix a = Matrix(row, col);
+	Matrix b = Matrix(row, col);
 
-	c = a - b;
+	a.eye();
+	b.eye();
+
+	Matrix c = a - b;
 
 	EXPECT_EQ(row, c.rows);
 	EXPECT_EQ(col, c.columns);
@@ -122,12 +143,13 @@ TEST(MatrixTest, MatrixSubtractionOverload) {
 
 TEST(MatrixTest, MatrixMultiplicationOverload) {
 
-	Matrix a, b, c;
+	Matrix a = Matrix(2, 3);
+	Matrix b = Matrix(3, 4);
 
-	a.matrix(2, 3).eye();
-	b.matrix(3, 4).eye();
+	a.eye();
+	b.eye();
 
-	c = a * b;
+	Matrix c = a * b;
 
 	EXPECT_EQ(2, c.rows);
 	EXPECT_EQ(4, c.columns);
@@ -148,11 +170,10 @@ TEST(MatrixTest, MatrixMultiplicationOverload) {
 
 TEST(MatrixTest, MatrixScalarMultiplicationOverload) {
 
-	Matrix a, b;
+	Matrix a = Matrix(2, 3);
+	a.eye();
 
-	a.matrix(2, 3).eye();
-
-	b = a * (float)5.3;
+	Matrix b = a * (float)5.3;
 
 	EXPECT_EQ(2, b.rows);
 	EXPECT_EQ(3, b.columns);
@@ -173,11 +194,10 @@ TEST(MatrixTest, MatrixScalarMultiplicationOverload) {
 
 TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
 
-	Matrix a, b;
+	Matrix a = Matrix(2, 3);
+	a.eye();
 
-	a.matrix(2, 3).eye();
-
-	b = (float)5.3 * a  ;
+	Matrix b = (float)5.3 * a  ;
 
 	EXPECT_EQ(2, b.rows);
 	EXPECT_EQ(3, b.columns);
@@ -197,8 +217,8 @@ TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
 
 
 TEST(MatrixTest, PrintMatrix) {
-	Matrix a;
-	a.matrix(3, 4).eye();
+	Matrix a = Matrix(3, 4);
+	a.eye();
 
 	//a.printMatrix();
 }
