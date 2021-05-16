@@ -4,12 +4,12 @@
 #include "matrix.h"
 
 //Constructor
-Matrix Matrix::matrix(int r, int c) {
+Matrix::Matrix(int r, int c) {
 
 	this->rows = r;
 	this->columns = c;
 
-	values = new float* [r];
+	this->values = new float* [r];
 
 	//Create Matrix
 	for (int ii = 0; ii < r; ii++) {
@@ -21,17 +21,17 @@ Matrix Matrix::matrix(int r, int c) {
 		}
 	}
 
-	return *this;
+	//return *this;
 }
 
 //Destructor
-void Matrix::freeMatrix() {
+Matrix::~Matrix() {
 
 	for (int ii = 0; ii < this->rows; ii++) {
-		free(this->values[ii]);
+		delete[] values[ii];
 	}
 
-	free(this->values);
+	delete[] values;  //memory leak ???
 }
 
 //assign a specific element at a specified place
@@ -59,16 +59,16 @@ Matrix Matrix::operator + (Matrix m) {
 	assert(this->columns == m.columns);
 	assert(this->rows == m.rows);
 
-	Matrix newMatrix;
-	newMatrix.matrix(this->rows, this->columns);
+	Matrix* newMatrix;
+	newMatrix = new Matrix(this->rows, this->columns);
 
-	for (int ii = 0; ii < newMatrix.rows; ii++) {
-		for (int jj = 0; jj < newMatrix.columns; jj++) {
-			newMatrix.values[ii][jj] = this->values[ii][jj] + m.values[ii][jj];
+	for (int ii = 0; ii < newMatrix->rows; ii++) {
+		for (int jj = 0; jj < newMatrix->columns; jj++) {
+			newMatrix->values[ii][jj] = this->values[ii][jj] + m.values[ii][jj];
 		}
 	}
 
-	return newMatrix;
+	return *newMatrix;
 }
 
 
@@ -78,8 +78,7 @@ Matrix Matrix::operator - (Matrix m) {
 	assert(this->columns == m.columns);
 	assert(this->rows == m.rows);
 
-	Matrix newMatrix;
-	newMatrix.matrix(this->rows, this->columns);
+	Matrix newMatrix = Matrix(this->rows, this->columns);
 
 	for (int ii = 0; ii < newMatrix.rows; ii++) {
 		for (int jj = 0; jj < newMatrix.columns; jj++) {
@@ -96,8 +95,7 @@ Matrix Matrix::operator * (Matrix m) {
 	assert(this->columns == m.rows);
 
 
-	Matrix newMatrix;
-	newMatrix.matrix(this->rows, m.columns);
+	Matrix newMatrix = Matrix(this->rows, m.columns);
 
 
 	for (int ii = 0; ii < this->rows; ii++) {
@@ -118,8 +116,7 @@ Matrix Matrix::operator * (Matrix m) {
 
 Matrix Matrix::operator * (float scalar) {
 
-	Matrix newMatrix;
-	newMatrix.matrix(this->rows, this->columns);
+	Matrix newMatrix = Matrix(this->rows, this->columns);
 
 
 	for (int ii = 0; ii < this->rows; ii++) {
@@ -135,12 +132,10 @@ Matrix Matrix::operator * (float scalar) {
 
 Matrix operator * (const float scalar, const Matrix m) {
 
-	Matrix newMatrix;
-	newMatrix.matrix(m.rows, m.columns);
+	Matrix newMatrix = Matrix(m.rows, m.columns);
 
 
 	for (int ii = 0; ii < m.rows; ii++) {
-
 		for (int jj = 0; jj < m.columns; jj++) {
 
 			newMatrix.values[ii][jj] = scalar * m.values[ii][jj];
@@ -149,6 +144,25 @@ Matrix operator * (const float scalar, const Matrix m) {
 	return newMatrix;
 }
 
+
+//Checked for Correctness
+Matrix& Matrix::operator=(const Matrix& matrix) {
+
+	if (this != &matrix) {
+
+		//this->~Matrix();
+		//this->matrix(matrix.rows,matrix.columns);
+
+		for (int ii = 0; ii < matrix.rows; ii++) {
+			for (int jj = 0; jj < matrix.columns; jj++) {
+				this->values[ii][jj] = matrix.values[ii][jj];
+			}
+		}
+
+	}
+
+	return *this;
+}
 
 
 void Matrix::printMatrix() {

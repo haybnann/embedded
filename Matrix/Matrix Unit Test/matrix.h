@@ -16,10 +16,10 @@ public:
 
 	void printMatrix();
 	//Constructor
-	Matrix matrix(int r, int c);
+	Matrix(int r, int c);
 
 	//Destructor
-	void freeMatrix();
+	~Matrix();
 
 	//assign a specific element at a specified place
 	void setElement(int r, int c, float value);
@@ -38,6 +38,8 @@ public:
 	Matrix operator * (float scalar);								//Matrix * Scalar
 	friend Matrix operator * (const float scalar, const Matrix m); //Scalar * Matrix
 
+
+	Matrix& Matrix::operator=(const Matrix& matrix);
 	//overload = Next
 	
 

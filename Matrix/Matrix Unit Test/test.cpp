@@ -4,22 +4,41 @@
 
 TEST(MatrixTest, Constructor) {
 
-	Matrix mat;
 	int row = 4, col = 5;
 
-	mat.matrix(row, col);
+	Matrix mat = Matrix(row, col);
 
 	EXPECT_EQ(row, mat.rows);
 	EXPECT_EQ(col, mat.columns);
 
 	for (int ii = 0; ii < row; ii++) {
 		for (int jj = 0; jj < col; jj++) {
-			EXPECT_EQ(0, mat.values[ii][jj]);
+			EXPECT_FLOAT_EQ(0, mat.values[ii][jj]);
 		}
 	}
+
 }
 
 
+TEST(MatrixTest, Destructor) {
+
+	int row = 4, col = 5;
+
+	Matrix* mat;
+	mat = new Matrix(row, col);
+
+	EXPECT_EQ(row, mat->rows);
+	EXPECT_EQ(col, mat->columns);
+
+	for (int ii = 0; ii < row; ii++) {
+		for (int jj = 0; jj < col; jj++) {
+			EXPECT_FLOAT_EQ(0, mat->values[ii][jj]);
+		}
+	}
+	delete mat;
+}
+
+/*
 TEST(MatrixTest, setElement) {
 
 	Matrix mat;
@@ -183,3 +202,4 @@ TEST(MatrixTest, PrintMatrix) {
 
 	//a.printMatrix();
 }
+*/
