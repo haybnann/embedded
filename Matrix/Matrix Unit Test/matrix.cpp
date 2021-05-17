@@ -98,12 +98,14 @@ Matrix& Matrix::operator+= (const Matrix& m) {
 	return *this;
 }
 
+
 const Matrix operator + (const Matrix& first_operand, const Matrix& second_operand) {
 
 	Matrix result(first_operand);//error
 	result += second_operand;
 	return result;
 }
+
 
 Matrix& Matrix::operator-= (const Matrix& m) {
 	for (int ii = 0; ii < this->rows; ii++) {
@@ -115,13 +117,13 @@ Matrix& Matrix::operator-= (const Matrix& m) {
 	return *this;
 }
 
+
 const Matrix operator - (const Matrix& first_operand, const Matrix& second_operand) {
 
 	Matrix result(first_operand);//error
 	result -= second_operand;
 	return result;
 }
-
 
 
 Matrix& Matrix::operator*= (const Matrix& m) {
@@ -146,37 +148,13 @@ Matrix& Matrix::operator*= (const Matrix& m) {
 	return *this;
 }
 
+
 const Matrix operator * (const Matrix& first_operand, const Matrix& second_operand) {
 
 	Matrix result(first_operand);//error
 	result *= second_operand;
 	return result;
 }
-/*Matrix& Matrix::operator * (Matrix& m) {
-
-	assert(this->columns == m.rows);
-
-
-	Matrix* newMatrix = new Matrix(this->rows, m.columns);
-
-
-	for (int ii = 0; ii < this->rows; ii++) {
-		for (int jj = 0; jj < m.columns; jj++) {
-
-			float sum = 0;
-
-			for (int kk = 0; kk < m.rows; kk++) {
-				sum += (this->values[ii][kk] * m.values[kk][jj]);
-			}
-
-			newMatrix->values[ii][jj] = sum;
-		}
-	}
-	return *newMatrix;
-}*/
-
-
-
 
 
 Matrix& Matrix::operator * (float scalar) {

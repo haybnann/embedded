@@ -24,26 +24,21 @@ public:
 	//Destructor
 	~Matrix();
 
-	//assign a specific element at a specified place
 	void setElement(int r, int c, float value);
+	void eye();// Rename maindiangonal ???
 
-	//make a diagonal matrix  -- Rename maindiangonal ???
-	void eye();
+	/***Operator Overload //***/
+	Matrix& operator =  (const Matrix& matrix);
+	Matrix& operator += (const Matrix& matrix);
+	Matrix& operator -= (const Matrix& matrix);
+	Matrix& operator *= (const Matrix& matrix);
 
-	//overload addition for matrices
-	
-	Matrix& operator = (const Matrix& matrix);
-
-	Matrix& operator += (const Matrix& m);
-	friend const Matrix operator + (const Matrix& first_operand, const Matrix& second_operand);
-
-	Matrix& operator -= (const Matrix& m);
+	friend const Matrix operator + (const Matrix& first_op, const Matrix& second_op);
 	friend const Matrix operator - (const Matrix& first_op, const Matrix& second_op);
-
-	Matrix& operator*= (const Matrix& m);
 	friend const Matrix operator * (const Matrix& first_op, const Matrix& second_op);
+
 	//Rewrite to make params pass by reference ???
-	//Matrix& operator * (Matrix& m);									//Matrix * Matrix
+
 	Matrix& operator * (float scalar);								//Matrix * Scalar
 	friend Matrix operator * (const float scalar, const Matrix& m); //Scalar * Matrix
 
@@ -56,4 +51,4 @@ public:
 };
 
 
-//Scalar * Matrix
+
