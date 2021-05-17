@@ -107,7 +107,6 @@ TEST(MatrixTest, MatrixAdditionOverload) {
 	a.eye();
 	b.eye();
 
-	//broken here
 	Matrix c;
 
 	c = (a + b);

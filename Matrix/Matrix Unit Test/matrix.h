@@ -17,6 +17,7 @@ public:
 	void printMatrix();
 	//Constructor
 	Matrix();
+	Matrix(const Matrix& matrix);
 	Matrix(int r, int c);
 
 	//Destructor
@@ -29,8 +30,9 @@ public:
 	void eye();
 
 	//overload addition for matrices
-	Matrix& operator + (const Matrix& m);
-
+	//Matrix operator + (const Matrix& m);
+	//const Matrix Matrix::operator + (const Matrix& m) const;
+	friend const Matrix operator + (const Matrix& first_operand, const Matrix& second_operand);
 	Matrix& operator - (Matrix& m);
 
 
@@ -41,6 +43,7 @@ public:
 
 
 	Matrix& operator = (const Matrix& matrix);
+	Matrix& operator += (const Matrix& m);
 	//overload = Next
 	
 

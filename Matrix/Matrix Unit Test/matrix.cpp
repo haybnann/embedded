@@ -12,6 +12,23 @@ Matrix::Matrix() {
 	this->values = new float* [rows];
 }
 
+Matrix::Matrix(const Matrix& matrix) {
+
+	this->rows = matrix.rows;
+	this->columns = matrix.columns;
+
+	this->values = new float* [rows];
+
+	for (int ii = 0; ii < rows; ii++) {
+
+		values[ii] = new float[columns];
+
+		for (int jj = 0; jj < columns; jj++) {
+			values[ii][jj] = matrix.values[ii][jj];
+		}
+	}
+}
+
 
 Matrix::Matrix(int r, int c) {
 
@@ -30,7 +47,6 @@ Matrix::Matrix(int r, int c) {
 		}
 	}
 
-	//return *this;
 }
 
 
@@ -73,21 +89,28 @@ void Matrix::printMatrix() {
 
 
 //*** Overloaded Functions***/
+/*
 Matrix& Matrix::operator + (const Matrix &m) {
 
 	//Change assertions to return an error
 	assert(this->columns == m.columns);
 	assert(this->rows == m.rows);
 
-	Matrix newMatrix =  Matrix(this->rows, this->columns);
+	Matrix* newMatrix = new Matrix(this->rows, this->columns);
 
-	for (int ii = 0; ii < newMatrix.rows; ii++) {
-		for (int jj = 0; jj < newMatrix.columns; jj++) {
-			newMatrix.values[ii][jj] = this->values[ii][jj] + m.values[ii][jj];
+	for (int ii = 0; ii < newMatrix->rows; ii++) {
+		for (int jj = 0; jj < newMatrix->columns; jj++) {
+			newMatrix->values[ii][jj] = this->values[ii][jj] + m.values[ii][jj];
 		}
 	}
 
-	return newMatrix;
+	return *newMatrix;
+}*/
+const Matrix operator + (const Matrix& first_operand, const Matrix& second_operand) {
+
+	Matrix result(first_operand);//error
+	result += second_operand;
+	return result;
 }
 
 
@@ -182,3 +205,12 @@ Matrix& Matrix::operator=(const Matrix& matrix) {
 	return *this;
 }
 
+Matrix& Matrix::operator+= (const Matrix& m) {
+	for (int ii = 0; ii < this->rows; ii++) {
+		for (int jj = 0; jj < this->columns; jj++) {
+			this->values[ii][jj] += m.values[ii][jj];
+		}
+	}
+
+	return *this;
+}
