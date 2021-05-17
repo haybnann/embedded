@@ -13,9 +13,10 @@ public:
 	int columns;
 	float** values;
 
-
+	//debug
 	void printMatrix();
-	//Constructor
+
+	//Constructors
 	Matrix();
 	Matrix(const Matrix& matrix);
 	Matrix(int r, int c);
@@ -30,20 +31,25 @@ public:
 	void eye();
 
 	//overload addition for matrices
-	//Matrix operator + (const Matrix& m);
-	//const Matrix Matrix::operator + (const Matrix& m) const;
+	
+	Matrix& operator = (const Matrix& matrix);
+
+	Matrix& operator += (const Matrix& m);
 	friend const Matrix operator + (const Matrix& first_operand, const Matrix& second_operand);
-	Matrix& operator - (Matrix& m);
 
+	Matrix& operator -= (const Matrix& m);
+	friend const Matrix operator - (const Matrix& first_op, const Matrix& second_op);
 
+	Matrix& operator*= (const Matrix& m);
+	friend const Matrix operator * (const Matrix& first_op, const Matrix& second_op);
 	//Rewrite to make params pass by reference ???
-	Matrix& operator * (Matrix& m);									//Matrix * Matrix
+	//Matrix& operator * (Matrix& m);									//Matrix * Matrix
 	Matrix& operator * (float scalar);								//Matrix * Scalar
 	friend Matrix operator * (const float scalar, const Matrix& m); //Scalar * Matrix
 
 
-	Matrix& operator = (const Matrix& matrix);
-	Matrix& operator += (const Matrix& m);
+
+
 	//overload = Next
 	
 
