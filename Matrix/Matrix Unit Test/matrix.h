@@ -24,9 +24,6 @@ public:
 	//Destructor
 	~Matrix();
 
-	void setElement(int r, int c, float value);
-	void eye();// Rename maindiangonal ???
-
 	/***Operator Overload //***/
 	Matrix& operator =  (const Matrix& matrix);
 	Matrix& operator += (const Matrix& matrix);
@@ -44,6 +41,10 @@ public:
 
 
 
+
+	float determinant(Matrix& matrix);
+	void setElement(int r, int c, float value);
+	void eye();// Rename maindiangonal ???
 
 	//overload = Next
 	
