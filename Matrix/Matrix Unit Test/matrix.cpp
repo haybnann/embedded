@@ -67,10 +67,52 @@ float determinant(Matrix& matrix) {
 
 //Reduced Row Echelon Form
 
+void Matrix::PartialPivot(Matrix& m) {
+
+	uint8_t largest = 0;
+	for (int ii = 0; ii < m.rows; ii++) {
+		if (m.values[ii][0] > m.values[largest][0]) {
+			largest = ii;
+		}
+	}
+	float* temp = m.values[0];
+	m.values[0] = m.values[largest];
+	m.values[largest] = temp;
+
+}
+
+
 
 //FUCKKKKK wheres my mistake
 void Matrix::rref() {
 	
+
+
+	int lead = 0;
+
+	while (lead < this->rows) {
+		float d, m;
+
+		for (int r = 0; r < this->rows; r++) { // for each row ...
+			/* calculate divisor and multiplier */
+			d = values[lead][lead];
+			m = values[r][lead] / values[lead][lead];
+			if ((d > 0.001) || (d < -0.001) && (m > 0.001) || (m < -0.001)) {
+				for (int c = 0; c < this->columns; c++) { // for each column ...
+					if (r == lead)
+						values[r][c] /= d;               // make pivot = 1
+					else
+						values[r][c] -= values[lead][c] * m;  // make other = 0
+				}
+			}
+			
+		}
+
+		lead++;
+	}
+
+
+	/**
 	int lead = 0;
 
 	for (int rr = 0; rr < this->rows; rr++) {
@@ -90,11 +132,11 @@ void Matrix::rref() {
 		}
 
 		if (ii != rr) {
-			/*for (int mm = 0; mm < this->columns; mm++) {
-				float temp = this->values[ii][mm];
-				this->values[ii][mm] = this->values[rr][mm];
-				this->values[rr][mm] = temp;
-			}*/
+			//for (int mm = 0; mm < this->columns; mm++) {
+				//float temp = this->values[ii][mm];
+				//this->values[ii][mm] = this->values[rr][mm];
+				//this->values[rr][mm] = temp;
+			//}
 			float* temp = this->values[ii];
 			this->values[ii] = this->values[rr];
 			this->values[rr] = temp;
@@ -113,7 +155,7 @@ void Matrix::rref() {
 			}
 		}
 		lead++;
-	}
+	}*/
 }
 
 //Row Echelon Form
@@ -187,6 +229,7 @@ void Matrix::printMatrix() {
 		}
 		printf("]\n");
 	}
+	printf("\n");
 }
 
 
