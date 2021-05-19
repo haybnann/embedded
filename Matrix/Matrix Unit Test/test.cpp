@@ -226,6 +226,24 @@ TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
 }
 
 
+
+TEST(MatrixTest, ReducedRowEchelonForm) {
+	Matrix a;
+	a = Matrix(3, 4);
+	
+	for (int ii = 0; ii < a.rows; ii++) {
+		for (int jj = 0; jj < a.columns; jj++) {
+			a.values[ii][jj] = ii + jj + 1;
+		}
+	}
+	Matrix b;
+	a.printMatrix();
+	a.rref();
+	a.printMatrix();
+
+}
+
+
 TEST(MatrixTest, PrintMatrix) {
 	Matrix a = Matrix(3, 4);
 	a.eye();

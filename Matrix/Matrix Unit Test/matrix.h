@@ -40,9 +40,9 @@ public:
 	friend Matrix operator * (const float scalar, const Matrix& m); //Scalar * Matrix
 
 
+	void rref();
 
-
-	float determinant(Matrix& matrix);
+	//float determinant(Matrix& matrix);
 	void setElement(int r, int c, float value);
 	void eye();// Rename maindiangonal ???
 

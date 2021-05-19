@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "matrix.h"
 
 #include "matrix.h"
@@ -58,56 +58,74 @@ Matrix::~Matrix() {
 
 	delete[] values;  //memory leak ???
 }
-
+/*
 float determinant(Matrix& matrix) {
-
+	//do stuff
+	return 0;
 }
-
+*/
 
 //Reduced Row Echelon Form
-//https://en.wikipedia.org/wiki/Row_echelon_form
-Matrix rref(Matrix m) {
+
+
+//FUCKKKKK wheres my mistake
+void Matrix::rref() {
 	
 	int lead = 0;
 
-	for (int rr = 0; rr < m.rows; rr++) {
-		if (m.columns < lead) {
-			break;//-----------------------FIX
+	for (int rr = 0; rr < this->rows; rr++) {
+		if (lead >= this->columns ) {
+			return;
 		}
 		int ii = rr;
-		while (m.values[rr][lead] == 0) {
-			ii = ii + 1;
-			if (m.rows == ii) {
+		while ((this->values[ii][lead] < 0.01) && (this->values[ii][lead] > -0.01)) {//------------FIX  Float comparison
+			ii++;
+			if (this->rows == ii) {
 				ii = rr;
-				lead = lead + 1;
-				if (m.columns == lead) {
-					break;
+				lead++;
+				if (this->columns == lead) {
+					return;
 				}
 			}
 		}
+
 		if (ii != rr) {
-			//swap rows ii and rr
+			/*for (int mm = 0; mm < this->columns; mm++) {
+				float temp = this->values[ii][mm];
+				this->values[ii][mm] = this->values[rr][mm];
+				this->values[rr][mm] = temp;
+			}*/
+			float* temp = this->values[ii];
+			this->values[ii] = this->values[rr];
+			this->values[rr] = temp;
 		}
-		//divide row rr by M[rr,lead]
-		//for 0<= i< rows{
-		//	if (ii != rr){
-		//		subtract M[i,lead] multiplied by row rr from row ii
-		//	}
-		//}
-		lead = lead + 1;
+		//Normalize row  rr lead
+		for (int kk = 0; kk < this->columns; kk++) {//divide row rr by M[rr,lead]
+			this->values[rr][kk]  /= this->values[rr][lead];
+		}
+
+		for (int ii = 0; ii < this->rows; ii++) {
+			if (ii != rr) {
+				float lv = this->values[ii][lead];
+				for (int mm = 0;mm < this->columns; mm++) {
+					this->values[ii][mm] += (-lv) * this->values[rr][mm];
+				}
+			}
+		}
+		lead++;
 	}
 }
 
 //Row Echelon Form
-Matrix ref(Matrix m) {
+//Matrix ref(Matrix m) {
 	/*
 function ToRowEchelonForm(Matrix M) is
     nr := number of rows in M
     nc := number of columns in M
     
-    for 0 ? r < nr do
+    for 0 ≤ r < nr do
         allZeros := true
-        for 0 ? c < nc do
+        for 0 ≤ c < nc do
             if M[r, c] != 0 then
                 allZeros := false
                 exit for
@@ -131,10 +149,10 @@ function ToRowEchelonForm(Matrix M) is
                 In M, swap row p with row (p + r)
                 r := r + 1
             end while
-            for 1 ? r < (nr - p) do 
+            for 1 ≤ r < (nr - p) do 
                 if M[p + r, p] != 0 then
                     x := -M[p + r, p] / M[p, p]
-                    for p ? c < nc do
+                    for p ≤ c < nc do
                         M[p + r, c] := M[p , c] * x + M[p + r, c]
                     end for
                 end if
@@ -143,7 +161,7 @@ function ToRowEchelonForm(Matrix M) is
     end while
 end function
 	*/
-}
+//}
 
 void Matrix::setElement(int r, int c, float value) {
 	this->values[r - 1][c - 1] = value;
