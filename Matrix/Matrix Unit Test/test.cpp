@@ -228,20 +228,21 @@ TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
 
 
 TEST(MatrixTest, ReducedRowEchelonForm) {
-	Matrix a;
-	a = Matrix(8, 5);
+	Matrix a= Matrix(8, 5);
 	
 	for (int ii = 0; ii < a.rows; ii++) {
 		for (int jj = 0; jj < a.columns; jj++) {
 			a.values[ii][jj] = ii + jj + 1;
 		}
 	}
-	Matrix b;
-	//a.printMatrix();
-	//a.rref();
-	//a.printMatrix();
+	a.printMatrix();
+	//a.PartialPivot(a);
+	a.rref();
+	a.printMatrix();
 
 }
+
+
 TEST(MatrixTest, PartialPivotTest) {
 	Matrix a;
 	a = Matrix(8, 5);
@@ -251,10 +252,10 @@ TEST(MatrixTest, PartialPivotTest) {
 			a.values[ii][jj] = ii + jj + 1;
 		}
 	}
-	a.printMatrix();
 	a.PartialPivot(a);
-	a.printMatrix();
+	
 
+	//Write test to check if max num in col 1 is in row 1----- TO DO
 }
 
 

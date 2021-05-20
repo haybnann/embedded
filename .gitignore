@@ -143,3 +143,4 @@ Matrix/Matrix Unit Test/pch.h
 Matrix/Matrix Unit Test/pch.cpp
 Matrix/Matrix Unit Test/packages.config
 Telemetry System Design~
+SensorFusion/Sensor Fusion Unit Test/.vs/Sensor Fusion Unit Test/v16/ipch/AutoPCH/ebf15c4890d0bd1b/WINAPI_THUNKS.ipch

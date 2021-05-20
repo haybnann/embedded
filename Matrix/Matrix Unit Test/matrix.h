@@ -41,7 +41,7 @@ public:
 
 
 	void rref();
-	void PartialPivot(Matrix& M); //should def be a private function
+	void PartialPivot(Matrix& M); //should definitely be a private function
 
 	//float determinant(Matrix& matrix);
 	void setElement(int r, int c, float value);

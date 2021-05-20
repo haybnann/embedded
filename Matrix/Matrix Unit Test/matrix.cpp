@@ -85,16 +85,52 @@ void Matrix::PartialPivot(Matrix& m) {
 
 //FUCKKKKK wheres my mistake
 void Matrix::rref() {
-	
+
+	int ii = 0, jj = 0, kk = 0, cc = 0;
+
+	for (ii = 0; ii < rows; ii++) {
+		if ((values[ii][ii] <0.01) && (values[ii][ii] > -0.01 )) {
+			cc = 1;
+			while (((ii + cc) < rows) && ((values[ii+cc][ii] < 0.01) && (values[ii+cc][ii] > -0.01))) {
+				cc++;
+			}
+			if ((ii + cc) == rows) {
+				break;
+			}
+			//swap
+			for (jj = ii, kk = 0; kk < rows; kk++) {
+
+				float temp = values[jj][kk];
+				values[jj][kk] = values[jj + cc][kk];
+				values[jj + cc][kk] = temp;
+			}
+				
+		}
+
+		for (jj = 0; jj < rows; jj++) {
+			if (ii != jj) {
+				float pro = values[jj][ii] / values[ii][ii];
+
+				for (kk = 0; kk < columns;kk++) {
+					values[jj][kk] = values[jj][kk] - values[ii][kk] * pro;
+				}
+
+			}
+		}
+
+	}
+}
 
 
-	int lead = 0;
+
+
+	/*int lead = 0;
 
 	while (lead < this->rows) {
 		float d, m;
 
 		for (int r = 0; r < this->rows; r++) { // for each row ...
-			/* calculate divisor and multiplier */
+			//calculate divisor and multiplier 
 			d = values[lead][lead];
 			m = values[r][lead] / values[lead][lead];
 			if ((d > 0.001) || (d < -0.001) && (m > 0.001) || (m < -0.001)) {
@@ -109,7 +145,7 @@ void Matrix::rref() {
 		}
 
 		lead++;
-	}
+	}*/
 
 
 	/**
@@ -156,7 +192,7 @@ void Matrix::rref() {
 		}
 		lead++;
 	}*/
-}
+//}
 
 //Row Echelon Form
 //Matrix ref(Matrix m) {
