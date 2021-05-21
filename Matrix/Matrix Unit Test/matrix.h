@@ -39,7 +39,7 @@ public:
 	Matrix& operator * (float scalar);								//Matrix * Scalar
 	friend Matrix operator * (const float scalar, const Matrix& m); //Scalar * Matrix
 
-
+	void Transpose();
 	void rref();
 	void PartialPivot(Matrix& M); //should definitely be a private function
 

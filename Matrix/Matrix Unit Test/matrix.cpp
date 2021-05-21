@@ -86,6 +86,8 @@ void Matrix::PartialPivot(Matrix& m) {
 //FUCKKKKK wheres my mistake
 void Matrix::rref() {
 
+
+	/*
 	int ii = 0, jj = 0, kk = 0, cc = 0;
 
 	for (ii = 0; ii < rows; ii++) {
@@ -98,7 +100,7 @@ void Matrix::rref() {
 				break;
 			}
 			//swap
-			for (jj = ii, kk = 0; kk < rows; kk++) {
+			for (jj = ii, kk = 0; kk < columns; kk++) {
 
 				float temp = values[jj][kk];
 				values[jj][kk] = values[jj + cc][kk];
@@ -118,8 +120,11 @@ void Matrix::rref() {
 			}
 		}
 
-	}
+	}*/
+
 }
+
+
 
 
 
@@ -388,3 +393,14 @@ Matrix& Matrix::operator=(const Matrix& matrix) {
 	return *this;
 }
 
+void Matrix::Transpose() {
+	Matrix temp = *this;
+	//this->~Matrix();
+	*this = Matrix(temp.columns, temp.rows);
+
+	for (int ii = 0; ii < rows; ii++) {
+		for (int jj = 0; jj < columns; jj++) {
+			values[ii][jj] = temp.values[jj][ii];
+		}
+	}
+}

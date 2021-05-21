@@ -228,15 +228,16 @@ TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
 
 
 TEST(MatrixTest, ReducedRowEchelonForm) {
-	Matrix a= Matrix(8, 5);
+	Matrix a= Matrix(5, 5);
 	
 	for (int ii = 0; ii < a.rows; ii++) {
 		for (int jj = 0; jj < a.columns; jj++) {
 			a.values[ii][jj] = ii + jj + 1;
 		}
 	}
-	a.printMatrix();
+	
 	//a.PartialPivot(a);
+	a.printMatrix();
 	a.rref();
 	a.printMatrix();
 
@@ -261,7 +262,16 @@ TEST(MatrixTest, PartialPivotTest) {
 
 TEST(MatrixTest, PrintMatrix) {
 	Matrix a = Matrix(3, 4);
-	a.eye();
+	
+	for (int ii = 0; ii < a.rows; ii++) {
+		for (int jj = 0; jj < a.columns; jj++) {
+			a.values[ii][jj] = ii + jj + 1;
+		}
+	}
+	a.printMatrix();
+	a.Transpose();
+	a.printMatrix();
+
 
 	//a.printMatrix();
 }
