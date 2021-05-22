@@ -241,6 +241,10 @@ TEST(MatrixTest, ReducedRowEchelonForm) {
 	a.rref();
 	a.printMatrix();
 
+
+	EXPECT_TRUE(0);
+	//TODO: write out test assertions
+
 }
 
 
@@ -256,11 +260,12 @@ TEST(MatrixTest, PartialPivotTest) {
 	a.PartialPivot(a);
 	
 
-	//Write test to check if max num in col 1 is in row 1----- TO DO
+	EXPECT_TRUE(0);
+	//TODO: write out test assertions
 }
 
 
-TEST(MatrixTest, PrintMatrix) {
+TEST(MatrixTest, Transpose) {
 	Matrix a = Matrix(3, 4);
 	
 	for (int ii = 0; ii < a.rows; ii++) {
@@ -268,10 +273,25 @@ TEST(MatrixTest, PrintMatrix) {
 			a.values[ii][jj] = ii + jj + 1;
 		}
 	}
-	a.printMatrix();
+	//a.printMatrix();
 	a.Transpose();
-	a.printMatrix();
+	//a.printMatrix();
 
+
+	EXPECT_TRUE(0);
+	//TODO: write out test assertions
+}
+
+
+TEST(MatrixTest, PrintMatrix) {
+	Matrix a = Matrix(3, 4);
+
+	for (int ii = 0; ii < a.rows; ii++) {
+		for (int jj = 0; jj < a.columns; jj++) {
+			a.values[ii][jj] = ii + jj + 1;
+		}
+
+	}
 
 	//a.printMatrix();
 }

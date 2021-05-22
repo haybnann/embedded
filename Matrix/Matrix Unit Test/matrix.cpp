@@ -87,7 +87,7 @@ void Matrix::PartialPivot(Matrix& m) {
 void Matrix::rref() {
 
 
-	/*
+
 	int ii = 0, jj = 0, kk = 0, cc = 0;
 
 	for (ii = 0; ii < rows; ii++) {
@@ -120,7 +120,7 @@ void Matrix::rref() {
 			}
 		}
 
-	}*/
+	}
 
 }
 
