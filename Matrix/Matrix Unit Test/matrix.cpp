@@ -67,17 +67,19 @@ float determinant(Matrix& matrix) {
 
 //Reduced Row Echelon Form
 
-void Matrix::PartialPivot(Matrix& m) {
+int Matrix::PartialPivot(Matrix& m, int column) {
 
-	uint8_t largest = 0;
+	int largest = 0;
 	for (int ii = 0; ii < m.rows; ii++) {
-		if (m.values[ii][0] > m.values[largest][0]) {
+		if (m.values[ii][column] >= m.values[largest][column]) {
 			largest = ii;
 		}
 	}
-	float* temp = m.values[0];
-	m.values[0] = m.values[largest];
-	m.values[largest] = temp;
+	//float* temp = m.values[0];
+	//m.values[0] = m.values[largest];
+	//m.values[largest] = temp;
+
+	return largest;
 
 }
 
@@ -86,8 +88,40 @@ void Matrix::PartialPivot(Matrix& m) {
 //FUCKKKKK wheres my mistake
 void Matrix::rref() {
 
+	int h = 0, k = 0;
 
 
+	while ((h < rows) && (k < columns)) {
+
+		int i_max = PartialPivot(Matrix(*this), k);
+
+		if ((values[i_max][k] >= -0.001 ) && (values[i_max][k] <= 0.001) ){
+			k++;
+		}
+		else {
+			float* temp = values[h];
+			values[h] = values[i_max];
+			values[i_max] = temp;
+
+			for (int i = h + 1; i < rows; i++) {
+				float f = values[i][k] / values[h][k];
+				values[i][k] = 0;
+				for (int j = k + 1;j < columns; j++) {
+					values[i][j] = values[i][j] - values[h][j] * f;
+
+				}
+			}
+			h++;
+			k++;
+		}
+
+	}
+
+
+
+}
+
+	/**
 	int ii = 0, jj = 0, kk = 0, cc = 0;
 
 	for (ii = 0; ii < rows; ii++) {
@@ -122,7 +156,7 @@ void Matrix::rref() {
 
 	}
 
-}
+}/
 
 
 

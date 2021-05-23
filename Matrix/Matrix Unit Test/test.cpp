@@ -257,7 +257,7 @@ TEST(MatrixTest, PartialPivotTest) {
 			a.values[ii][jj] = ii + jj + 1;
 		}
 	}
-	a.PartialPivot(a);
+	a.PartialPivot(a,0);
 	
 
 	EXPECT_TRUE(0);
