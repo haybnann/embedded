@@ -2,6 +2,8 @@
 #include "matrix.h"
 #include <stdlib.h>
 
+//TO DO: Test Edge cases
+
 TEST(MatrixTest, Constructor) {
 
 	int row = 4, col = 5;
@@ -46,7 +48,7 @@ TEST(MatrixTest, MatrixEqualityOverload) {
 	Matrix a = Matrix(row, col);
 	Matrix b;
 
-	a.eye();
+	a.Identity();
 
 	b = a;
 
@@ -73,8 +75,8 @@ TEST(MatrixTest, MatrixAdditionOverload) {
 	Matrix a = Matrix(row, col);
 	Matrix b = Matrix(row, col);
 	
-	a.eye();
-	b.eye();
+	a.Identity();
+	b.Identity();
 
 	Matrix c;
 
@@ -104,8 +106,8 @@ TEST(MatrixTest, MatrixSubtractionOverload) {
 	Matrix a = Matrix(row, col);
 	Matrix b = Matrix(row, col);
 
-	a.eye();
-	b.eye();
+	a.Identity();
+	b.Identity();
 
 	Matrix c = a - b;
 
@@ -125,8 +127,8 @@ TEST(MatrixTest, MatrixMultiplicationOverload) {
 	Matrix a = Matrix(2, 3);
 	Matrix b = Matrix(3, 4);
 
-	a.eye();
-	b.eye();
+	a.Identity();
+	b.Identity();
 
 	Matrix c = a * b;
 
@@ -150,7 +152,7 @@ TEST(MatrixTest, MatrixMultiplicationOverload) {
 TEST(MatrixTest, MatrixScalarMultiplicationOverload) {
 
 	Matrix a = Matrix(2, 3);
-	a.eye();
+	a.Identity();
 
 	Matrix b = a * (float)5.3;
 
@@ -174,7 +176,7 @@ TEST(MatrixTest, MatrixScalarMultiplicationOverload) {
 TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
 
 	Matrix a = Matrix(2, 3);
-	a.eye();
+	a.Identity();
 
 	Matrix b = (float)5.3 * a  ;
 
@@ -213,12 +215,12 @@ TEST(MatrixTest, Transpose) {
 }
 
 
-TEST(MatrixTest, eye) {
+TEST(MatrixTest, Identity) {
 
 	int row = 4, col = 4;
 	
 	Matrix mat = Matrix(row, col);
-	mat.eye();
+	mat.Identity();
 
 	for (int ii = 0; ii < row; ii++) {
 		for (int jj = 0; jj < col; jj++) {

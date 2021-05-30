@@ -235,8 +235,7 @@ void Matrix::Inverse() {
 	}
 }
 
-
-void Matrix::eye() {
+void Matrix::Identity() {
 	for (int ii = 0; ii < this->rows; ii++) {
 		for (int jj = 0; jj <= ii; jj++) {
 			if (ii == jj) {

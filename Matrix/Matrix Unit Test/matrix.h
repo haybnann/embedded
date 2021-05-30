@@ -1,4 +1,7 @@
 #pragma once
+
+//TO DO: Add Accessors foir testing ... or use namespace.. idk find what works best
+
 class Matrix
 {
 	
@@ -31,15 +34,13 @@ public:
 	friend const Matrix operator - (const Matrix& first_op, const Matrix& second_op);
 	friend const Matrix operator * (const Matrix& first_op, const Matrix& second_op);
 
-	//Rewrite to make params pass by reference ???
-
 	Matrix& operator * (float scalar);								//Matrix * Scalar
 	friend Matrix operator * (const float scalar, const Matrix& m); //Scalar * Matrix
 
 	void Transpose();
 	void Inverse();
 
-	void eye();// Rename maindiangonal ???
+	void Identity();// Rename maindiangonal ???
 
 	//debug
 	void printMatrix();
