@@ -57,7 +57,6 @@ Matrix::~Matrix() {
 	delete[] values;  //memory leak ???
 }
 
-
 //*** Overloaded Functions***/
 Matrix& Matrix::operator =  (const Matrix& m) {
 

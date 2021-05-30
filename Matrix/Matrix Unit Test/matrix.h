@@ -5,15 +5,13 @@
 class Matrix
 {
 	
-private:
-
-protected:
-
-public:	
-
+private:	
 	int rows;
 	int columns;
 	float** values;
+protected:
+
+public:	
 
 
 	//Constructors
@@ -39,8 +37,7 @@ public:
 
 	void Transpose();
 	void Inverse();
-
-	void Identity();// Rename maindiangonal ???
+	void Identity();
 
 	//debug
 	void printMatrix();

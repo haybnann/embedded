@@ -1,21 +1,55 @@
 #include "pch.h"
-#include "matrix.h"
 #include <stdlib.h>
 
-//TO DO: Test Edge cases
 
-TEST(MatrixTest, Constructor) {
+//Ugly trick to access private variables... Don't do this in anything other than tests
+#define private public
+#include "matrix.h"
+#undef private //end ugly trick
+
+TEST(MatrixTest, Default_Constructor) {
+
+	Matrix default_matrix = Matrix();
+
+	EXPECT_EQ(0, default_matrix.rows);
+	EXPECT_EQ(0, default_matrix.columns);
+
+	//EXPECT_EQ(true, false);//Note tp Fix test
+	//EXPECT_EQ(NULL, values)
+}
+
+
+TEST(MatrixTest, Parameterized_Constructor) {
 
 	int row = 4, col = 5;
 
-	Matrix mat = Matrix(row, col);
+	Matrix pc_matrix = Matrix(row, col);
 
-	EXPECT_EQ(row, mat.rows);
-	EXPECT_EQ(col, mat.columns);
+	EXPECT_EQ(row, pc_matrix.rows);
+	EXPECT_EQ(col, pc_matrix.columns);
 
 	for (int ii = 0; ii < row; ii++) {
 		for (int jj = 0; jj < col; jj++) {
-			EXPECT_FLOAT_EQ(0, mat.values[ii][jj]);
+			EXPECT_FLOAT_EQ(0, pc_matrix.values[ii][jj]);
+		}
+	}
+
+}
+
+
+TEST(MatrixTest, Copy_Constructor) {
+
+	int row = 4, col = 5;
+
+	Matrix original = Matrix(row, col);
+	Matrix copy = Matrix(original);
+
+	EXPECT_EQ(row, copy.rows);
+	EXPECT_EQ(col, copy.columns);
+
+	for (int ii = 0; ii < row; ii++) {
+		for (int jj = 0; jj < col; jj++) {
+			EXPECT_FLOAT_EQ(0, copy.values[ii][jj]);
 		}
 	}
 
@@ -38,10 +72,12 @@ TEST(MatrixTest, Destructor) {
 		}
 	}
 	delete mat;
+
+	///EXPECT_EQ(false, true);//NOTE: find out how to test for destruction
 }
 
 
-TEST(MatrixTest, MatrixEqualityOverload) {
+TEST(MatrixTest, Equals_Overload) {
 
 	int row = 4, col = 4;
 
@@ -49,9 +85,9 @@ TEST(MatrixTest, MatrixEqualityOverload) {
 	Matrix b;
 
 	a.Identity();
-
 	b = a;
 
+	//I think I'm checking to make sure these aren't pointing to the same location
 	EXPECT_FALSE(&a == &b);
 	EXPECT_FALSE(&(a.values) == &(b.values));
 
@@ -68,7 +104,7 @@ TEST(MatrixTest, MatrixEqualityOverload) {
 }
 
 
-TEST(MatrixTest, MatrixAdditionOverload) {
+TEST(MatrixTest, Addition_Overload) {
 	
 	int row = 4, col = 4;
 	
@@ -99,7 +135,7 @@ TEST(MatrixTest, MatrixAdditionOverload) {
 }
 
 
-TEST(MatrixTest, MatrixSubtractionOverload) {
+TEST(MatrixTest, Subtraction_Overload) {
 
 	int row = 4, col = 4;
 
@@ -122,7 +158,7 @@ TEST(MatrixTest, MatrixSubtractionOverload) {
 }
 
 
-TEST(MatrixTest, MatrixMultiplicationOverload) {
+TEST(MatrixTest, Multiplication_Overload) {
 
 	Matrix a = Matrix(2, 3);
 	Matrix b = Matrix(3, 4);
@@ -149,7 +185,7 @@ TEST(MatrixTest, MatrixMultiplicationOverload) {
 }
 
 
-TEST(MatrixTest, MatrixScalarMultiplicationOverload) {
+TEST(MatrixTest, Matrix_Scalar_Multiplication_Overload) {
 
 	Matrix a = Matrix(2, 3);
 	a.Identity();
@@ -162,7 +198,7 @@ TEST(MatrixTest, MatrixScalarMultiplicationOverload) {
 	for (int ii = 0; ii < b.rows; ii++) {
 		for (int jj = 0; jj < b.columns; jj++) {
 			if (ii == jj) {
-				EXPECT_FLOAT_EQ(5.3, b.values[ii][jj]);
+				EXPECT_FLOAT_EQ(5.3f, b.values[ii][jj]);
 			}
 			else {
 				EXPECT_FLOAT_EQ(0, b.values[ii][jj]);
@@ -173,12 +209,14 @@ TEST(MatrixTest, MatrixScalarMultiplicationOverload) {
 }
 
 
-TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
+TEST(MatrixTest, Scalar_Matrix_Multiplication_Overload) {
 
 	Matrix a = Matrix(2, 3);
 	a.Identity();
 
-	Matrix b = (float)5.3 * a  ;
+	float v5_3 = 5.3f;
+
+	Matrix b = v5_3 * a  ;
 
 	EXPECT_EQ(2, b.rows);
 	EXPECT_EQ(3, b.columns);
@@ -186,7 +224,7 @@ TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
 	for (int ii = 0; ii < b.rows; ii++) {
 		for (int jj = 0; jj < b.columns; jj++) {
 			if (ii == jj) {
-				EXPECT_FLOAT_EQ(5.3, b.values[ii][jj]);
+				EXPECT_FLOAT_EQ(v5_3, b.values[ii][jj]);
 			}
 			else {
 				EXPECT_FLOAT_EQ(0, b.values[ii][jj]);
@@ -194,6 +232,11 @@ TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
 		}
 	}
 
+}
+
+
+TEST(MatrixTest, Order_of_Operations) {
+	///EXPECT_EQ(true, false);
 }
 
 
@@ -202,15 +245,13 @@ TEST(MatrixTest, Transpose) {
 	
 	for (int ii = 0; ii < a.rows; ii++) {
 		for (int jj = 0; jj < a.columns; jj++) {
-			a.values[ii][jj] = ii + jj + 1;
+			a.values[ii][jj] = float(ii + jj + 1);
 		}
 	}
-	//a.printMatrix();
+
 	a.Transpose();
-	//a.printMatrix();
 
-
-	EXPECT_TRUE(0);
+	//EXPECT_TRUE(0);
 	//TODO: write out test assertions
 }
 
@@ -234,19 +275,17 @@ TEST(MatrixTest, Identity) {
 	}
 }
 
-TEST(MatrixTest,InverseTest) {
+
+TEST(MatrixTest, Inverse) {
 	Matrix a;
 	a = Matrix(5, 5);
 
 	for (int ii = 0; ii < a.rows; ii++) {
 		for (int jj = 0; jj < a.columns; jj++) {
-			a.values[ii][jj] = rand() % 10;
+			a.values[ii][jj] = float(rand() % 10);
 		}
 	}
-	a.printMatrix();
 	a.Inverse();
-	a.printMatrix();
-	
 
 	//EXPECT_TRUE(0);
 	//TODO: write out test assertions
@@ -258,7 +297,7 @@ TEST(MatrixTest, PrintMatrix) {
 
 	for (int ii = 0; ii < a.rows; ii++) {
 		for (int jj = 0; jj < a.columns; jj++) {
-			a.values[ii][jj] = ii + jj + 1;
+			a.values[ii][jj] = float(ii + jj + 1);
 		}
 
 	}
