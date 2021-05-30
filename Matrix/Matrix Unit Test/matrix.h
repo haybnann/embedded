@@ -6,15 +6,12 @@ private:
 
 protected:
 
-
 public:	
 
 	int rows;
 	int columns;
 	float** values;
 
-	//debug
-	void printMatrix();
 
 	//Constructors
 	Matrix();
@@ -40,16 +37,12 @@ public:
 	friend Matrix operator * (const float scalar, const Matrix& m); //Scalar * Matrix
 
 	void Transpose();
-	void rref();
-	int PartialPivot(Matrix& M, int column); //should definitely be a private function
+	void Inverse();
 
-	//float determinant(Matrix& matrix);
-	void setElement(int r, int c, float value);
 	void eye();// Rename maindiangonal ???
 
-	//overload = Next
-	
-
+	//debug
+	void printMatrix();
 };
 
 

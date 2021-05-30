@@ -11,7 +11,6 @@ Matrix::Matrix() {
 
 	this->values = new float* [rows];
 }
-
 Matrix::Matrix(const Matrix& matrix) {
 
 	this->rows = matrix.rows;
@@ -28,7 +27,6 @@ Matrix::Matrix(const Matrix& matrix) {
 		}
 	}
 }
-
 Matrix::Matrix(int r, int c) {
 
 	this->rows = r;
@@ -58,258 +56,27 @@ Matrix::~Matrix() {
 
 	delete[] values;  //memory leak ???
 }
-/*
-float determinant(Matrix& matrix) {
-	//do stuff
-	return 0;
-}
-*/
-
-//Reduced Row Echelon Form
-
-int Matrix::PartialPivot(Matrix& m, int column) {
-
-	int largest = 0;
-	for (int ii = 0; ii < m.rows; ii++) {
-		if (m.values[ii][column] >= m.values[largest][column]) {
-			largest = ii;
-		}
-	}
-	//float* temp = m.values[0];
-	//m.values[0] = m.values[largest];
-	//m.values[largest] = temp;
-
-	return largest;
-
-}
-
-
-
-//FUCKKKKK wheres my mistake
-void Matrix::rref() {
-
-	int h = 0, k = 0;
-
-
-	while ((h < rows) && (k < columns)) {
-
-		int i_max = PartialPivot(Matrix(*this), k);
-
-		if ((values[i_max][k] >= -0.001 ) && (values[i_max][k] <= 0.001) ){
-			k++;
-		}
-		else {
-			float* temp = values[h];
-			values[h] = values[i_max];
-			values[i_max] = temp;
-
-			for (int i = h + 1; i < rows; i++) {
-				float f = values[i][k] / values[h][k];
-				values[i][k] = 0;
-				for (int j = k + 1;j < columns; j++) {
-					values[i][j] = values[i][j] - values[h][j] * f;
-
-				}
-			}
-			h++;
-			k++;
-		}
-
-	}
-
-
-
-}
-
-	/**
-	int ii = 0, jj = 0, kk = 0, cc = 0;
-
-	for (ii = 0; ii < rows; ii++) {
-		if ((values[ii][ii] <0.01) && (values[ii][ii] > -0.01 )) {
-			cc = 1;
-			while (((ii + cc) < rows) && ((values[ii+cc][ii] < 0.01) && (values[ii+cc][ii] > -0.01))) {
-				cc++;
-			}
-			if ((ii + cc) == rows) {
-				break;
-			}
-			//swap
-			for (jj = ii, kk = 0; kk < columns; kk++) {
-
-				float temp = values[jj][kk];
-				values[jj][kk] = values[jj + cc][kk];
-				values[jj + cc][kk] = temp;
-			}
-				
-		}
-
-		for (jj = 0; jj < rows; jj++) {
-			if (ii != jj) {
-				float pro = values[jj][ii] / values[ii][ii];
-
-				for (kk = 0; kk < columns;kk++) {
-					values[jj][kk] = values[jj][kk] - values[ii][kk] * pro;
-				}
-
-			}
-		}
-
-	}
-
-}/
-
-
-
-
-
-
-	/*int lead = 0;
-
-	while (lead < this->rows) {
-		float d, m;
-
-		for (int r = 0; r < this->rows; r++) { // for each row ...
-			//calculate divisor and multiplier 
-			d = values[lead][lead];
-			m = values[r][lead] / values[lead][lead];
-			if ((d > 0.001) || (d < -0.001) && (m > 0.001) || (m < -0.001)) {
-				for (int c = 0; c < this->columns; c++) { // for each column ...
-					if (r == lead)
-						values[r][c] /= d;               // make pivot = 1
-					else
-						values[r][c] -= values[lead][c] * m;  // make other = 0
-				}
-			}
-			
-		}
-
-		lead++;
-	}*/
-
-
-	/**
-	int lead = 0;
-
-	for (int rr = 0; rr < this->rows; rr++) {
-		if (lead >= this->columns ) {
-			return;
-		}
-		int ii = rr;
-		while ((this->values[ii][lead] < 0.01) && (this->values[ii][lead] > -0.01)) {//------------FIX  Float comparison
-			ii++;
-			if (this->rows == ii) {
-				ii = rr;
-				lead++;
-				if (this->columns == lead) {
-					return;
-				}
-			}
-		}
-
-		if (ii != rr) {
-			//for (int mm = 0; mm < this->columns; mm++) {
-				//float temp = this->values[ii][mm];
-				//this->values[ii][mm] = this->values[rr][mm];
-				//this->values[rr][mm] = temp;
-			//}
-			float* temp = this->values[ii];
-			this->values[ii] = this->values[rr];
-			this->values[rr] = temp;
-		}
-		//Normalize row  rr lead
-		for (int kk = 0; kk < this->columns; kk++) {//divide row rr by M[rr,lead]
-			this->values[rr][kk]  /= this->values[rr][lead];
-		}
-
-		for (int ii = 0; ii < this->rows; ii++) {
-			if (ii != rr) {
-				float lv = this->values[ii][lead];
-				for (int mm = 0;mm < this->columns; mm++) {
-					this->values[ii][mm] += (-lv) * this->values[rr][mm];
-				}
-			}
-		}
-		lead++;
-	}*/
-//}
-
-//Row Echelon Form
-//Matrix ref(Matrix m) {
-	/*
-function ToRowEchelonForm(Matrix M) is
-    nr := number of rows in M
-    nc := number of columns in M
-    
-    for 0 ≤ r < nr do
-        allZeros := true
-        for 0 ≤ c < nc do
-            if M[r, c] != 0 then
-                allZeros := false
-                exit for
-            end if
-        end for
-        if allZeros = true then
-            In M, swap row r with row nr
-            nr := nr - 1
-        end if
-    end for
-    
-    p := 0
-    while p < nr and p < nc do
-        label nextPivot:
-            r := 1
-            while M[p, p] = 0 do 
-                if (p + r) <= nr then
-                    p := p + 1
-                    goto nextPivot
-                end if
-                In M, swap row p with row (p + r)
-                r := r + 1
-            end while
-            for 1 ≤ r < (nr - p) do 
-                if M[p + r, p] != 0 then
-                    x := -M[p + r, p] / M[p, p]
-                    for p ≤ c < nc do
-                        M[p + r, c] := M[p , c] * x + M[p + r, c]
-                    end for
-                end if
-            end for
-            p := p + 1
-    end while
-end function
-	*/
-//}
-
-void Matrix::setElement(int r, int c, float value) {
-	this->values[r - 1][c - 1] = value;
-}
-
-
-void Matrix::eye() {
-	for (int ii = 0; ii < this->rows; ii++) {
-		for (int jj = 0; jj <= ii; jj++) {
-			if (ii == jj) {
-				this->values[ii][jj] = 1;
-			}
-		}
-	}
-}
-
-
-void Matrix::printMatrix() {
-	for (int ii = 0; ii < this->rows; ii++) {
-		printf("[");
-		for (int jj = 0; jj < this->columns; jj++) {
-			printf(" %.1f ", this->values[ii][jj]);
-		}
-		printf("]\n");
-	}
-	printf("\n");
-}
 
 
 //*** Overloaded Functions***/
-Matrix& Matrix::operator+= (const Matrix& m) {
+Matrix& Matrix::operator =  (const Matrix& m) {
+
+	if (this != &m) {
+		
+		this->~Matrix();
+		new (this) Matrix(m.rows,m.columns);
+
+		for (int ii = 0; ii < m.rows; ii++) {
+			for (int jj = 0; jj < m.columns; jj++) {
+				this->values[ii][jj] = m.values[ii][jj];
+			}
+		}
+
+	}
+
+	return *this;
+}
+Matrix& Matrix::operator += (const Matrix& m) {
 	for (int ii = 0; ii < this->rows; ii++) {
 		for (int jj = 0; jj < this->columns; jj++) {
 			this->values[ii][jj] += m.values[ii][jj];
@@ -318,17 +85,7 @@ Matrix& Matrix::operator+= (const Matrix& m) {
 
 	return *this;
 }
-
-
-const Matrix operator + (const Matrix& first_operand, const Matrix& second_operand) {
-
-	Matrix result(first_operand);//error
-	result += second_operand;
-	return result;
-}
-
-
-Matrix& Matrix::operator-= (const Matrix& m) {
+Matrix& Matrix::operator -= (const Matrix& m) {
 	for (int ii = 0; ii < this->rows; ii++) {
 		for (int jj = 0; jj < this->columns; jj++) {
 			this->values[ii][jj] -= m.values[ii][jj];
@@ -337,17 +94,7 @@ Matrix& Matrix::operator-= (const Matrix& m) {
 
 	return *this;
 }
-
-
-const Matrix operator - (const Matrix& first_operand, const Matrix& second_operand) {
-
-	Matrix result(first_operand);//error
-	result -= second_operand;
-	return result;
-}
-
-
-Matrix& Matrix::operator*= (const Matrix& m) {
+Matrix& Matrix::operator *= (const Matrix& m) {
 	assert(this->columns == m.rows);
 
 	Matrix temporary = Matrix(this->rows,m.columns);
@@ -369,14 +116,24 @@ Matrix& Matrix::operator*= (const Matrix& m) {
 	return *this;
 }
 
+const Matrix operator + (const Matrix& first_operand, const Matrix& second_operand) {
 
+	Matrix result(first_operand);//error
+	result += second_operand;
+	return result;
+}
+const Matrix operator - (const Matrix& first_operand, const Matrix& second_operand) {
+
+	Matrix result(first_operand);//error
+	result -= second_operand;
+	return result;
+}
 const Matrix operator * (const Matrix& first_operand, const Matrix& second_operand) {
 
 	Matrix result(first_operand);//error
 	result *= second_operand;
 	return result;
 }
-
 
 Matrix& Matrix::operator * (float scalar) {
 
@@ -392,8 +149,6 @@ Matrix& Matrix::operator * (float scalar) {
 	}
 	return *newMatrix;
 }
-
-
 Matrix operator * (const float scalar, const Matrix& m) {
 
 	Matrix* newMatrix = new Matrix(m.rows, m.columns);
@@ -409,24 +164,6 @@ Matrix operator * (const float scalar, const Matrix& m) {
 }
 
 
-Matrix& Matrix::operator=(const Matrix& matrix) {
-
-	if (this != &matrix) {
-		
-		this->~Matrix();
-		new (this) Matrix(matrix.rows,matrix.columns);
-
-		for (int ii = 0; ii < matrix.rows; ii++) {
-			for (int jj = 0; jj < matrix.columns; jj++) {
-				this->values[ii][jj] = matrix.values[ii][jj];
-			}
-		}
-
-	}
-
-	return *this;
-}
-
 void Matrix::Transpose() {
 	Matrix temp = *this;
 	//this->~Matrix();
@@ -437,4 +174,86 @@ void Matrix::Transpose() {
 			values[ii][jj] = temp.values[jj][ii];
 		}
 	}
+}
+
+//This is very inefficient -- needs improvement
+void Matrix::Inverse() {
+	assert(rows == columns);
+	Matrix newMatrix = Matrix(rows, columns * 2);
+	int dims = rows;
+
+	float temp;
+
+
+	//append I matrix 
+	for (int ii = 0; ii < dims;ii++) {
+		for (int jj = 0; jj < (2* dims); jj++) {
+			if (jj == (ii + dims)) {
+				newMatrix.values[ii][jj] = 1;
+			}
+			if ((ii < dims) && (jj < dims)) {
+				newMatrix.values[ii][jj] = values[ii][jj];
+			}
+		}
+	}
+
+	//swap rows
+	for (int ii = dims - 1;ii > 0;ii--) {
+		if (newMatrix.values[ii - 1][0] < newMatrix.values[ii][0]) {
+			float* temp = newMatrix.values[ii];
+			newMatrix.values[ii] = newMatrix.values[ii - 1];
+			newMatrix.values[ii - 1] = temp;
+		}
+	}
+
+	
+	//elimination
+	for (int ii = 0; ii < dims; ii++) {
+		for (int jj = 0; jj < dims; jj++) {
+			if (jj != ii) {
+				temp = newMatrix.values[jj][ii] / newMatrix.values[ii][ii];
+				for (int kk = 0; kk < 2*dims; kk++) {
+					newMatrix.values[jj][kk] -= newMatrix.values[ii][kk] * temp;
+				}
+			}
+		}
+	}
+
+
+	for (int ii = 0; ii < dims; ii++) {
+		temp = newMatrix.values[ii][ii];
+		for (int jj = 0; jj < 2*dims; jj++) {
+			newMatrix.values[ii][jj] = newMatrix.values[ii][jj] / temp;
+		}
+	}
+
+	//Copy into old matrix
+	for (int ii = 0; ii < dims; ii++) {
+		for (int jj = 0; jj < dims; jj++) {
+			values[ii][jj] = newMatrix.values[ii][jj + dims];
+		}
+	}
+}
+
+
+void Matrix::eye() {
+	for (int ii = 0; ii < this->rows; ii++) {
+		for (int jj = 0; jj <= ii; jj++) {
+			if (ii == jj) {
+				this->values[ii][jj] = 1;
+			}
+		}
+	}
+}
+
+//change this to use better formatting
+void Matrix::printMatrix() {
+	for (int ii = 0; ii < this->rows; ii++) {
+		printf("[");
+		for (int jj = 0; jj < this->columns; jj++) {
+			printf(" %.2f ", this->values[ii][jj]);
+		}
+		printf("]\n");
+	}
+	printf("\n");
 }

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "matrix.h"
-
+#include <stdlib.h>
 
 TEST(MatrixTest, Constructor) {
 
@@ -38,37 +38,6 @@ TEST(MatrixTest, Destructor) {
 	delete mat;
 }
 
-
-TEST(MatrixTest, setElement) {
-	
-	int row = 4, col = 4;
-
-	Matrix mat = Matrix(row, col);
-
-	mat.setElement(1, 3, 2.3);
-
-	EXPECT_FLOAT_EQ(2.3, mat.values[0][2]);
-}
-
-
-TEST(MatrixTest, eye) {
-
-	int row = 4, col = 4;
-	
-	Matrix mat = Matrix(row, col);
-	mat.eye();
-
-	for (int ii = 0; ii < row; ii++) {
-		for (int jj = 0; jj < col; jj++) {
-			if (ii == jj) {
-				EXPECT_EQ(1, mat.values[ii][jj]);
-			}
-			else {
-				EXPECT_EQ(0, mat.values[ii][jj]);
-			}
-		}
-	}
-}
 
 TEST(MatrixTest, MatrixEqualityOverload) {
 
@@ -226,45 +195,6 @@ TEST(MatrixTest, ScalarMatrixMultiplicationOverload) {
 }
 
 
-
-TEST(MatrixTest, ReducedRowEchelonForm) {
-	Matrix a= Matrix(5, 5);
-	
-	for (int ii = 0; ii < a.rows; ii++) {
-		for (int jj = 0; jj < a.columns; jj++) {
-			a.values[ii][jj] = ii + jj + 1;
-		}
-	}
-	
-	//a.PartialPivot(a);
-	a.printMatrix();
-	a.rref();
-	a.printMatrix();
-
-
-	EXPECT_TRUE(0);
-	//TODO: write out test assertions
-
-}
-
-
-TEST(MatrixTest, PartialPivotTest) {
-	Matrix a;
-	a = Matrix(8, 5);
-
-	for (int ii = 0; ii < a.rows; ii++) {
-		for (int jj = 0; jj < a.columns; jj++) {
-			a.values[ii][jj] = ii + jj + 1;
-		}
-	}
-	a.PartialPivot(a,0);
-	
-
-	EXPECT_TRUE(0);
-	//TODO: write out test assertions
-}
-
-
 TEST(MatrixTest, Transpose) {
 	Matrix a = Matrix(3, 4);
 	
@@ -279,6 +209,44 @@ TEST(MatrixTest, Transpose) {
 
 
 	EXPECT_TRUE(0);
+	//TODO: write out test assertions
+}
+
+
+TEST(MatrixTest, eye) {
+
+	int row = 4, col = 4;
+	
+	Matrix mat = Matrix(row, col);
+	mat.eye();
+
+	for (int ii = 0; ii < row; ii++) {
+		for (int jj = 0; jj < col; jj++) {
+			if (ii == jj) {
+				EXPECT_EQ(1, mat.values[ii][jj]);
+			}
+			else {
+				EXPECT_EQ(0, mat.values[ii][jj]);
+			}
+		}
+	}
+}
+
+TEST(MatrixTest,InverseTest) {
+	Matrix a;
+	a = Matrix(5, 5);
+
+	for (int ii = 0; ii < a.rows; ii++) {
+		for (int jj = 0; jj < a.columns; jj++) {
+			a.values[ii][jj] = rand() % 10;
+		}
+	}
+	a.printMatrix();
+	a.Inverse();
+	a.printMatrix();
+	
+
+	//EXPECT_TRUE(0);
 	//TODO: write out test assertions
 }
 
