@@ -1,10 +1,7 @@
 ﻿#include "pch.h"
 #include "matrix.h"
 
-#include "matrix.h"
-
-//Constructor
-
+//Constructor & Destructor
 Matrix::Matrix() {
 	this->rows = 0;
 	this->columns = 0;
@@ -45,9 +42,6 @@ Matrix::Matrix(int r, int c) {
 	}
 
 }
-
-
-//Destructor
 Matrix::~Matrix() {
 
 	for (int ii = 0; ii < this->rows; ii++) {

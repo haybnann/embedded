@@ -248,8 +248,8 @@ TEST(MatrixTest, Transpose) {
 			a.values[ii][jj] = float(ii + jj + 1);
 		}
 	}
-
 	a.Transpose();
+
 
 	//EXPECT_TRUE(0);
 	//TODO: write out test assertions

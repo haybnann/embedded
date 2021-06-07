@@ -1,6 +1,10 @@
 #pragma once
 
-//TO DO: Add Accessors foir testing ... or use namespace.. idk find what works best
+/*
+* The purpose of this class is to provide a simple, easy to use matrix operations for use with Kalman Filters and other controls software.
+*/
+
+
 
 class Matrix
 {
